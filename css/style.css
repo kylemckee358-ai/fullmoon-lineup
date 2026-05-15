@@ -1,0 +1,590 @@
+/* ============================================================
+   Full Moon Festival Lineup App
+   ============================================================ */
+
+:root {
+  --bg:            #EDE8DC;
+  --surface:       #E6E0D4;
+  --card:          #FDFBF7;
+  --card-hover:    #F7F4EE;
+  --text:          #1A1908;
+  --text-muted:    #7A7568;
+  --text-dim:      #B0AA9F;
+  --accent:        #F0A218;
+  --accent-light:  rgba(240, 162, 24, 0.15);
+  --border:        rgba(26, 25, 8, 0.08);
+  --border-strong: rgba(26, 25, 8, 0.13);
+  --shadow:        0 1px 3px rgba(26, 25, 8, 0.08), 0 1px 2px rgba(26, 25, 8, 0.06);
+  --shadow-lg:     0 4px 16px rgba(26, 25, 8, 0.10);
+  --radius:        10px;
+  --radius-sm:     7px;
+  --radius-pill:   999px;
+
+  /* Stage colours — warm palette for light mode */
+  --c-outdoor:    #2D6A4F;
+  --c-bunka:      #9B2335;
+  --c-g2f:        #C45C17;
+  --c-revival:    #6B3FA0;
+  --c-hotwax:     #B5860D;
+  --c-volume:     #1A6B8A;
+  --c-roomtour:   #C43060;
+  --c-pub:        #4A7C59;
+  --c-default:    #5A5244;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(237, 232, 220, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 12px 20px;
+}
+
+.header-title {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.header-sub {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-top: 2px;
+  letter-spacing: 0.01em;
+}
+
+/* ── View Toggle ── */
+
+.view-toggle {
+  display: flex;
+  background: var(--card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  gap: 2px;
+}
+
+.view-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  letter-spacing: 0.01em;
+}
+
+.view-btn:hover:not(.active) {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.view-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.view-btn svg { flex-shrink: 0; }
+
+/* ============================================================
+   DAY NAV
+   ============================================================ */
+
+.day-nav {
+  position: sticky;
+  top: 53px;
+  z-index: 90;
+  background: rgba(237, 232, 220, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  max-width: 100%;
+}
+
+.day-nav-days {
+  display: flex;
+  gap: 8px;
+}
+
+.day-btn {
+  background: var(--card);
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 7px 22px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  box-shadow: var(--shadow);
+}
+
+.day-btn:hover:not(.active) {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.day-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(240, 162, 24, 0.35);
+}
+
+/* ============================================================
+   MAIN / VIEWS
+   ============================================================ */
+
+#app {
+  padding: 20px 16px 60px;
+}
+
+.view {
+  display: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.view.active { display: block; }
+.view.visible { opacity: 1; transform: translateY(0); }
+
+.empty-day {
+  text-align: center;
+  padding: 64px 20px;
+  color: var(--text-dim);
+  font-weight: 500;
+  font-size: 15px;
+}
+
+/* ============================================================
+   LINEUP VIEW
+   ============================================================ */
+
+.lineup-inner {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.lineup-header {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+
+/* ── Stage Section ── */
+
+.stage-section {
+  margin-bottom: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 16px;
+  cursor: pointer;
+  user-select: none;
+  gap: 10px;
+  transition: background 0.15s;
+}
+
+.stage-header:hover { background: var(--card-hover); }
+
+.stage-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stage-pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--stage-color, var(--c-default));
+  flex-shrink: 0;
+}
+
+.stage-name {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.stage-count {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dim);
+}
+
+.stage-chevron {
+  color: var(--text-dim);
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 0.22s ease;
+  flex-shrink: 0;
+}
+
+.stage-section.collapsed .stage-chevron {
+  transform: rotate(-90deg);
+}
+
+/* ── Acts list ── */
+
+.acts-list {
+  overflow: hidden;
+  max-height: 4000px;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stage-section.collapsed .acts-list { max-height: 0; }
+
+.act-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  border-top: 1px solid var(--border);
+  transition: background 0.12s;
+  cursor: default;
+}
+
+.act-row:hover { background: var(--card-hover); }
+
+/* Circular avatar/initial badge */
+.act-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--stage-color, var(--c-default));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  opacity: 0.9;
+}
+
+.act-info { flex: 1; min-width: 0; }
+
+.act-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.act-time {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-top: 2px;
+  letter-spacing: 0.01em;
+}
+
+.act-type {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stage-color, var(--c-default));
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.act-row--past {
+  opacity: 0.45;
+}
+
+/* ============================================================
+   TIMELINE / BLOCKS VIEW
+   ============================================================ */
+
+.timeline-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  background: var(--card);
+}
+
+.timeline-inner {
+  min-width: 800px;
+  position: relative;
+}
+
+/* ── Ruler ── */
+
+.timeline-ruler {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.time-tick {
+  flex: 1;
+  padding: 9px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  border-right: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.time-tick:last-child { border-right: none; }
+
+/* ── Stage groups ── */
+
+.timeline-stages {
+  position: relative;
+}
+
+.timeline-stage {
+  border-bottom: 1px solid var(--border);
+}
+
+.timeline-stage:last-child { border-bottom: none; }
+
+/* Stage name as a full-width header above the blocks */
+.timeline-stage-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+/* The name wrap is sticky so it pins to the left as you scroll sideways */
+.timeline-stage-name-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  position: sticky;
+  left: 0;
+  background: var(--surface);
+  z-index: 4;
+}
+
+.timeline-stage-pip {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--stage-color, var(--c-default));
+  flex-shrink: 0;
+}
+
+.timeline-stage-name {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+/* ── Track ── */
+
+.timeline-track {
+  position: relative;
+  min-height: 72px;
+  overflow: visible;
+  background: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent calc(var(--tick-pct, 12.5%) - 1px),
+    var(--border) calc(var(--tick-pct, 12.5%) - 1px),
+    var(--border) var(--tick-pct, 12.5%)
+  );
+}
+
+/* ── Act block ── */
+
+.tl-block {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  border-radius: 8px;
+  background: var(--stage-color, var(--c-default));
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  overflow: hidden;
+  cursor: default;
+  transition: filter 0.15s, transform 0.15s;
+  min-width: 6px;
+  box-shadow: 0 1px 4px rgba(26,25,8,0.14);
+}
+
+.tl-block:hover {
+  filter: brightness(1.08);
+  transform: scaleY(1.06);
+  z-index: 20;
+}
+
+.tl-block--past {
+  opacity: 0.4;
+  filter: saturate(0.5);
+}
+
+.tl-block--past:hover {
+  opacity: 0.7;
+  filter: saturate(0.7) brightness(1.08);
+}
+
+.tl-block-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.tl-block-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+.tl-block-time {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  white-space: nowrap;
+}
+
+/* ── Tooltip ── */
+
+.tl-block::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text);
+  color: var(--bg);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 100;
+}
+
+.tl-block:hover::after { opacity: 1; }
+
+/* ── Current time line ── */
+
+.now-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 6px rgba(240,162,24,0.5);
+  z-index: 8;
+  pointer-events: none;
+}
+
+.now-label {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .header-inner { padding: 10px 14px; }
+  .header-title { font-size: 15px; }
+  .day-nav { padding: 8px 14px; }
+  #app { padding: 16px 12px 60px; }
+  .day-btn { padding: 7px 14px; font-size: 12px; }
+  .view-btn { padding: 5px 10px; font-size: 11px; }
+  .act-avatar { width: 36px; height: 36px; font-size: 12px; }
+  .act-name { font-size: 14px; }
+  .timeline-stage-label { width: 112px; min-width: 112px; padding: 0 10px; }
+}
+
+/* On desktop, don't collapse stages */
+@media (min-width: 768px) {
+  .stage-section .acts-list { max-height: 4000px !important; }
+  .stage-chevron { display: none; }
+  .stage-header { cursor: default; }
+  .stage-header:hover { background: transparent; }
+}
