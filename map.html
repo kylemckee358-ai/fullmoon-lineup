@@ -8,7 +8,51 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    html, body { height: 100%; }
+
+    #map {
+      height: calc(100vh - var(--site-nav-h));
+      width: 100%;
+    }
+
+    /* Dark popup to match festival theme */
+    .leaflet-popup-content-wrapper {
+      background: #141414;
+      color: #fff;
+      border: 1px solid rgba(42,255,0,0.3);
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+      font-family: 'Inter', sans-serif;
+    }
+    .leaflet-popup-tip { background: #141414; }
+    .leaflet-popup-close-button { color: rgba(255,255,255,0.5) !important; }
+    .leaflet-popup-close-button:hover { color: #fff !important; }
+
+    .popup-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #2AFF00;
+      margin-bottom: 4px;
+    }
+    .popup-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+    }
+
+    /* Neon green custom marker */
+    .fmf-pin {
+      width: 22px;
+      height: 22px;
+      background: #2AFF00;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      border: 2px solid #000;
+      box-shadow: 0 0 12px rgba(42,255,0,0.7);
+    }
+  </style>
 </head>
 <body>
 
@@ -25,18 +69,41 @@
     <a class="site-nav__link active" href="map.html">Map</a>
   </nav>
 
-  <main class="home-main">
-    <div class="placeholder-page">
-      <div class="placeholder-icon">
-        <svg viewBox="0 0 60 60" fill="none" aria-hidden="true">
-          <path d="M30 6C21.716 6 15 12.716 15 21c0 12.375 15 33 15 33S45 33.375 45 21C45 12.716 38.284 6 30 6z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
-          <circle cx="30" cy="21" r="5" stroke="currentColor" stroke-width="2.2"/>
-        </svg>
-      </div>
-      <div class="placeholder-title">Map</div>
-      <div class="placeholder-sub">Site map &amp; directions coming soon</div>
-    </div>
-  </main>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const LAT = 54.1408;
+    const LNG = -4.4901;
+
+    const map = L.map('map').setView([LAT, LNG], 15);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" style="color:#2AFF00">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" style="color:#2AFF00">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    const pinIcon = L.divIcon({
+      className: '',
+      html: '<div class="fmf-pin"></div>',
+      iconSize: [22, 22],
+      iconAnchor: [11, 22],
+      popupAnchor: [0, -24]
+    });
+
+    L.marker([LAT, LNG], { icon: pinIcon })
+      .addTo(map)
+      .bindPopup(`
+        <div class="popup-title">Full Moon Festival 2026</div>
+        <div class="popup-sub">
+          Rose Hill Farm<br>
+          Richmond Hill, Douglas<br>
+          Isle of Man
+        </div>
+      `)
+      .openPopup();
+  </script>
 
 </body>
 </html>
