@@ -66,61 +66,15 @@ body::before {
    ============================================================ */
 
 .site-header {
-  padding: 22px 16px 14px;
-  text-align: center;
+  display: block;
+  line-height: 0;
   border-bottom: 1px solid var(--border-green);
 }
 
-.header-inner {
-  max-width: 700px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.header-brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-.header-moon {
-  height: 54px;
-  width: auto;
-  flex-shrink: 0;
-  border-radius: 50%;
-  filter: drop-shadow(0 0 10px rgba(42,255,0,0.5));
-}
-
-.header-wordmark {
-  height: 48px;
-  width: auto;
-  max-width: 270px;
-  object-fit: contain;
-}
-
-.header-meta {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.header-date-img {
-  height: 18px;
-  width: auto;
-}
-
-.header-location {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-dim);
+.header-banner {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* ============================================================
@@ -670,10 +624,6 @@ body::before {
    ============================================================ */
 
 @media (max-width: 480px) {
-  .site-header { padding: 16px 12px 12px; }
-  .header-moon { height: 44px; }
-  .header-wordmark { height: 38px; max-width: 200px; }
-  .header-date-img { height: 15px; }
   .day-nav { padding: 8px 12px; }
   #app { padding: 14px 10px 60px; }
   .day-btn { padding: 6px 14px; font-size: 12px; }
