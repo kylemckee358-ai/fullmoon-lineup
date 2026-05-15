@@ -22,6 +22,82 @@ let currentView = 'lineup';
 let currentDay  = 'Friday';
 let timelineTimer = null;
 
+/* ── Reminders (localStorage) ─────────────────────────────── */
+
+const REMINDERS = new Set(JSON.parse(localStorage.getItem('fmf_reminders') || '[]'));
+
+function reminderKey(act) {
+  return `${act.name}|${act.day}|${act.start}`;
+}
+
+function saveReminders() {
+  localStorage.setItem('fmf_reminders', JSON.stringify([...REMINDERS]));
+}
+
+const MONTH_MAP = {
+  January:'01', February:'02', March:'03', April:'04',
+  May:'05', June:'06', July:'07', August:'08', September:'09',
+  October:'10', November:'11', December:'12'
+};
+
+function buildICS(act) {
+  const [d, m, y] = LINEUP_DATA.dates[act.day].split(' ');
+  const dateBase = `${y}${MONTH_MAP[m]}${String(d).padStart(2, '0')}`;
+  const dtStart  = `${dateBase}T${act.start.replace(':', '')}00`;
+
+  let dtEnd;
+  if (act.end < act.start) {
+    const next = new Date(parseInt(y), Object.keys(MONTH_MAP).indexOf(m), parseInt(d) + 1);
+    dtEnd = `${next.getFullYear()}${String(next.getMonth()+1).padStart(2,'0')}${String(next.getDate()).padStart(2,'0')}T${act.end.replace(':','') }00`;
+  } else {
+    dtEnd = `${dateBase}T${act.end.replace(':', '')}00`;
+  }
+
+  return [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'CALSCALE:GREGORIAN',
+    'BEGIN:VEVENT',
+    `DTSTART:${dtStart}`,
+    `DTEND:${dtEnd}`,
+    `SUMMARY:${act.name} @ ${act.stage}`,
+    'LOCATION:Ross Hill Farm, Richmond Hill, Douglas, Isle of Man',
+    'DESCRIPTION:Full Moon Festival 2026',
+    `UID:${act.name.replace(/\W+/g, '-')}-${dtStart}@fmf2026`,
+    'BEGIN:VALARM', 'TRIGGER:-PT15M', 'ACTION:DISPLAY',
+    'DESCRIPTION:Starting in 15 minutes', 'END:VALARM',
+    'END:VEVENT', 'END:VCALENDAR'
+  ].join('\r\n');
+}
+
+function handleBell(btn) {
+  const act = {
+    name:  btn.dataset.name,
+    stage: btn.dataset.stage,
+    day:   btn.dataset.day,
+    start: btn.dataset.start,
+    end:   btn.dataset.end
+  };
+  const key = reminderKey(act);
+
+  if (REMINDERS.has(key)) {
+    REMINDERS.delete(key);
+    btn.classList.remove('set');
+    btn.setAttribute('aria-label', `Set reminder for ${act.name}`);
+  } else {
+    const ics  = buildICS(act);
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url;
+    a.download = `${act.name.replace(/\s+/g, '-')}.ics`;
+    a.click();
+    URL.revokeObjectURL(url);
+    REMINDERS.add(key);
+    btn.classList.add('set');
+    btn.setAttribute('aria-label', `Remove reminder for ${act.name}`);
+  }
+  saveReminders();
+}
+
 /* ── Helpers ──────────────────────────────────────────────── */
 
 function stageColour(stage) {
@@ -104,8 +180,10 @@ function renderLineupView(day) {
         <div class="acts-list">`;
 
     for (const act of list) {
-      const ini = initials(act.name);
-      const past = adjMins(act.start) < nowAdjL ? 'act-row--past' : '';
+      const ini     = initials(act.name);
+      const past    = adjMins(act.start) < nowAdjL ? 'act-row--past' : '';
+      const rKey    = reminderKey(act);
+      const bellSet = REMINDERS.has(rKey) ? 'set' : '';
       html += `
           <div class="act-row ${past}">
             <div class="act-avatar" aria-hidden="true">${ini}</div>
@@ -114,6 +192,19 @@ function renderLineupView(day) {
               <div class="act-time">${act.start} – ${act.end}</div>
             </div>
             <span class="act-type">${escHtml(act.type)}</span>
+            <button class="bell-btn ${bellSet}"
+              onclick="handleBell(this)"
+              data-name="${escHtml(act.name)}"
+              data-stage="${escHtml(act.stage)}"
+              data-day="${act.day}"
+              data-start="${act.start}"
+              data-end="${act.end}"
+              aria-label="${bellSet ? 'Remove' : 'Set'} reminder for ${escHtml(act.name)}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+            </button>
           </div>`;
     }
 
@@ -195,8 +286,10 @@ function renderTimelineView(day) {
 
       const left  = ((s - winStart) / winDuration * 100).toFixed(3);
       const width = ((e - s)        / winDuration * 100).toFixed(3);
-      const tooltip = `${escHtml(act.name)} · ${act.start}–${act.end}`;
-      const pastCls = s < nowAdj ? 'tl-block--past' : '';
+      const tooltip  = `${escHtml(act.name)} · ${act.start}–${act.end}`;
+      const pastCls  = s < nowAdj ? 'tl-block--past' : '';
+      const rKeyTl   = reminderKey(act);
+      const bellSetTl = REMINDERS.has(rKeyTl) ? 'set' : '';
 
       blocks += `
         <div class="tl-block ${pastCls}" style="left:calc(${left}% + 2px);width:calc(${width}% - 4px);background:${colour};" data-tooltip="${tooltip}">
@@ -204,6 +297,19 @@ function renderTimelineView(day) {
             <span class="tl-block-name">${escHtml(act.name)}</span>
             <span class="tl-block-time">${act.start}–${act.end}</span>
           </div>
+          <button class="bell-btn bell-btn--block ${bellSetTl}"
+            onclick="handleBell(this)"
+            data-name="${escHtml(act.name)}"
+            data-stage="${escHtml(act.stage)}"
+            data-day="${act.day}"
+            data-start="${act.start}"
+            data-end="${act.end}"
+            aria-label="${bellSetTl ? 'Remove' : 'Set'} reminder for ${escHtml(act.name)}">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </button>
         </div>`;
     }
 

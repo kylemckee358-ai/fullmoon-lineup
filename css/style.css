@@ -354,6 +354,61 @@ body {
   opacity: 0.45;
 }
 
+.bell-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  margin-left: 4px;
+  cursor: pointer;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bell-btn:hover {
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+.bell-btn.set {
+  color: var(--accent);
+}
+
+.bell-btn.set svg path:first-child {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+
+/* Bell inside timeline blocks — white on coloured background */
+.bell-btn--block {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 3px;
+  margin-left: 0;
+  color: rgba(255, 255, 255, 0.55);
+  border-radius: 4px;
+}
+
+.bell-btn--block:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.bell-btn--block.set {
+  color: #fff;
+}
+
+.bell-btn--block.set svg path:first-child {
+  fill: #fff;
+  stroke: #fff;
+}
+
 /* ============================================================
    TIMELINE / BLOCKS VIEW
    ============================================================ */
@@ -497,6 +552,7 @@ body {
   gap: 1px;
   overflow: hidden;
   pointer-events: none;
+  padding-right: 18px;
 }
 
 .tl-block-name {
