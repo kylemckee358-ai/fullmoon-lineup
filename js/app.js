@@ -124,6 +124,26 @@ function escHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+/* Returns a midnight-normalised Date for a festival day */
+function dayDate(day) {
+  const [d, m, y] = LINEUP_DATA.dates[day].split(' ');
+  return new Date(parseInt(y), Object.keys(MONTH_MAP).indexOf(m), parseInt(d));
+}
+
+/* True only if the act's day has passed, or it's that day and the start time has passed */
+function isActPast(act) {
+  const now     = new Date();
+  const today   = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const actDay  = dayDate(act.day);
+
+  if (today < actDay) return false;
+  if (today > actDay) return true;
+
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+  const nowAdj  = nowMins < OVERNIGHT_CUTOFF ? nowMins + 1440 : nowMins;
+  return adjMins(act.start) < nowAdj;
+}
+
 /* Initials from act name (up to 2 chars) */
 function initials(name) {
   const words = name.trim().split(/\s+/);
@@ -154,9 +174,6 @@ function renderLineupView(day) {
 
   const dateLabel = LINEUP_DATA.dates[day] || day;
 
-  const nowMinsL  = new Date().getHours() * 60 + new Date().getMinutes();
-  const nowAdjL   = nowMinsL < OVERNIGHT_CUTOFF ? nowMinsL + 1440 : nowMinsL;
-
   let html = `<div class="lineup-inner"><div class="lineup-header">Line-Up &mdash; ${dateLabel}</div>`;
 
   for (const stage of LINEUP_DATA.stages) {
@@ -180,7 +197,7 @@ function renderLineupView(day) {
 
     for (const act of list) {
       const ini     = initials(act.name);
-      const past    = adjMins(act.start) < nowAdjL ? 'act-row--past' : '';
+      const past    = isActPast(act) ? 'act-row--past' : '';
       const rKey    = reminderKey(act);
       const bellSet = REMINDERS.has(rKey) ? 'set' : '';
       html += `
@@ -255,12 +272,13 @@ function renderTimelineView(day) {
   }
   ruler += '</div>';
 
-  // Current time
-  const nowRaw = new Date();
-  const nowMins = nowRaw.getHours() * 60 + nowRaw.getMinutes();
-  const nowAdj  = nowMins < OVERNIGHT_CUTOFF ? nowMins + 1440 : nowMins;
-  const nowPct  = ((nowAdj - winStart) / winDuration) * 100;
-  const showNow = nowPct >= 0 && nowPct <= 100;
+  // Current time — only show now-line if today is this festival day
+  const nowRaw       = new Date();
+  const nowMins      = nowRaw.getHours() * 60 + nowRaw.getMinutes();
+  const nowAdj       = nowMins < OVERNIGHT_CUTOFF ? nowMins + 1440 : nowMins;
+  const nowPct       = ((nowAdj - winStart) / winDuration) * 100;
+  const todayIsDay   = nowRaw.toDateString() === dayDate(day).toDateString();
+  const showNow      = todayIsDay && nowPct >= 0 && nowPct <= 100;
 
   // Stage rows
   const grouped = {};
@@ -286,7 +304,7 @@ function renderTimelineView(day) {
       const left  = ((s - winStart) / winDuration * 100).toFixed(3);
       const width = ((e - s)        / winDuration * 100).toFixed(3);
       const tooltip  = `${escHtml(act.name)} · ${act.start}–${act.end}`;
-      const pastCls  = s < nowAdj ? 'tl-block--past' : '';
+      const pastCls  = isActPast(act) ? 'tl-block--past' : '';
       const rKeyTl   = reminderKey(act);
       const bellSetTl = REMINDERS.has(rKeyTl) ? 'set' : '';
 
