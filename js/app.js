@@ -6,17 +6,17 @@
    ============================================================ */
 
 const STAGE_COLOURS = {
-  'Outdoor Main Stage': '#2D6A4F',
-  'Bunka':             '#9B2335',
-  'Groove2Funk':       '#C45C17',
-  'ReVival':           '#6B3FA0',
-  'Hot Wax':           '#B5860D',
-  'Volume':            '#1A6B8A',
-  'RoomTour':          '#C43060',
-  'The Pub':           '#4A7C59'
+  'Outdoor Main Stage': '#2AFF00',
+  'Bunka':             '#FF3D6B',
+  'Groove2Funk':       '#FF7A00',
+  'ReVival':           '#AA55FF',
+  'Hot Wax':           '#FFD100',
+  'Volume':            '#20A5FF',
+  'RoomTour':          '#FF4488',
+  'The Pub':           '#6EF9F5'
 };
 
-const DEFAULT_COLOUR = '#5A5244';
+const DEFAULT_COLOUR = '#888888';
 
 let currentView = 'lineup';
 let currentDay  = 'Friday';

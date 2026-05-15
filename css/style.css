@@ -1,35 +1,37 @@
 /* ============================================================
-   Full Moon Festival Lineup App
+   Full Moon Festival Lineup App — 2026
    ============================================================ */
 
 :root {
-  --bg:            #EDE8DC;
-  --surface:       #E6E0D4;
-  --card:          #FDFBF7;
-  --card-hover:    #F7F4EE;
-  --text:          #1A1908;
-  --text-muted:    #7A7568;
-  --text-dim:      #B0AA9F;
-  --accent:        #F0A218;
-  --accent-light:  rgba(240, 162, 24, 0.15);
-  --border:        rgba(26, 25, 8, 0.08);
-  --border-strong: rgba(26, 25, 8, 0.13);
-  --shadow:        0 1px 3px rgba(26, 25, 8, 0.08), 0 1px 2px rgba(26, 25, 8, 0.06);
-  --shadow-lg:     0 4px 16px rgba(26, 25, 8, 0.10);
+  --bg:            #000000;
+  --surface:       #0d0d0d;
+  --card:          #141414;
+  --card-hover:    #1d1d1d;
+  --text:          #ffffff;
+  --text-muted:    rgba(255,255,255,0.52);
+  --text-dim:      rgba(255,255,255,0.28);
+  --accent:        #2AFF00;
+  --accent-light:  rgba(42,255,0,0.12);
+  --accent-glow:   rgba(42,255,0,0.45);
+  --border:        rgba(255,255,255,0.07);
+  --border-strong: rgba(255,255,255,0.13);
+  --border-green:  rgba(42,255,0,0.22);
+  --shadow:        0 1px 4px rgba(0,0,0,0.7);
+  --shadow-lg:     0 4px 24px rgba(0,0,0,0.85);
   --radius:        10px;
-  --radius-sm:     7px;
+  --radius-sm:     6px;
   --radius-pill:   999px;
 
-  /* Stage colours — warm palette for light mode */
-  --c-outdoor:    #2D6A4F;
-  --c-bunka:      #9B2335;
-  --c-g2f:        #C45C17;
-  --c-revival:    #6B3FA0;
-  --c-hotwax:     #B5860D;
-  --c-volume:     #1A6B8A;
-  --c-roomtour:   #C43060;
-  --c-pub:        #4A7C59;
-  --c-default:    #5A5244;
+  /* Stage colours — vibrant on dark */
+  --c-outdoor:   #2AFF00;
+  --c-bunka:     #FF3D6B;
+  --c-g2f:       #FF7A00;
+  --c-revival:   #AA55FF;
+  --c-hotwax:    #FFD100;
+  --c-volume:    #20A5FF;
+  --c-roomtour:  #FF4488;
+  --c-pub:       #6EF9F5;
+  --c-default:   #888888;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -45,40 +47,131 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Subtle zigzag texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url('../Assets/Untitled-1_0001_abstract_background_02-copy-12.png') repeat;
+  background-size: 280px auto;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.site-header, .day-nav, #app { position: relative; z-index: 1; }
+
 /* ============================================================
    HEADER
    ============================================================ */
 
 .site-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(237, 232, 220, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
+  padding: 22px 16px 14px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-green);
 }
 
 .header-inner {
-  max-width: 860px;
+  max-width: 700px;
   margin: 0 auto;
-  padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
-.header-title {
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--text);
-  line-height: 1.1;
+.header-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
 
-.header-sub {
-  font-size: 11px;
-  font-weight: 500;
+.header-moon {
+  height: 54px;
+  width: auto;
+  flex-shrink: 0;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 10px rgba(42,255,0,0.5));
+}
+
+.header-wordmark {
+  height: 48px;
+  width: auto;
+  max-width: 270px;
+  object-fit: contain;
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.header-date-img {
+  height: 18px;
+  width: auto;
+}
+
+.header-location {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* ============================================================
+   DAY NAV + VIEW TOGGLE
+   ============================================================ */
+
+.day-nav {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-green);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+}
+
+.day-nav-days {
+  display: flex;
+  gap: 8px;
+}
+
+.day-btn {
+  background: transparent;
+  border: 1px solid var(--border-strong);
   color: var(--text-muted);
-  margin-top: 2px;
-  letter-spacing: 0.01em;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 7px 20px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border-color 0.18s, box-shadow 0.18s;
+}
+
+.day-btn:hover:not(.active) {
+  border-color: var(--border-green);
+  color: var(--text);
+}
+
+.day-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+  font-weight: 800;
+  box-shadow: 0 0 14px var(--accent-glow);
 }
 
 /* ── View Toggle ── */
@@ -102,76 +195,25 @@ body {
   font-family: inherit;
   font-weight: 600;
   font-size: 12px;
-  padding: 6px 12px;
-  border-radius: 5px;
+  padding: 6px 11px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background 0.18s, color 0.18s;
+  transition: background 0.15s, color 0.15s;
   letter-spacing: 0.01em;
 }
 
 .view-btn:hover:not(.active) {
-  background: var(--surface);
+  background: var(--card-hover);
   color: var(--text);
 }
 
 .view-btn.active {
   background: var(--accent);
-  color: #fff;
+  color: #000;
+  font-weight: 700;
 }
 
 .view-btn svg { flex-shrink: 0; }
-
-/* ============================================================
-   DAY NAV
-   ============================================================ */
-
-.day-nav {
-  position: sticky;
-  top: 53px;
-  z-index: 90;
-  background: rgba(237, 232, 220, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-  max-width: 100%;
-}
-
-.day-nav-days {
-  display: flex;
-  gap: 8px;
-}
-
-.day-btn {
-  background: var(--card);
-  border: 1px solid var(--border-strong);
-  color: var(--text-muted);
-  font-family: inherit;
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 7px 22px;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
-  box-shadow: var(--shadow);
-}
-
-.day-btn:hover:not(.active) {
-  background: var(--surface);
-  color: var(--text);
-}
-
-.day-btn.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(240, 162, 24, 0.35);
-}
 
 /* ============================================================
    MAIN / VIEWS
@@ -188,7 +230,7 @@ body {
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-.view.active { display: block; }
+.view.active  { display: block; }
 .view.visible { opacity: 1; transform: translateY(0); }
 
 .empty-day {
@@ -209,30 +251,34 @@ body {
 }
 
 .lineup-header {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--text);
-  margin-bottom: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
   padding: 0 4px;
 }
 
 /* ── Stage Section ── */
 
 .stage-section {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: var(--shadow);
+}
+
+.stage-section:hover {
+  border-color: rgba(255,255,255,0.1);
 }
 
 .stage-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 13px 16px;
+  padding: 12px 16px;
   cursor: pointer;
   user-select: none;
   gap: 10px;
@@ -244,7 +290,7 @@ body {
 .stage-header-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
 }
 
 .stage-pip {
@@ -253,12 +299,13 @@ body {
   border-radius: 50%;
   background: var(--stage-color, var(--c-default));
   flex-shrink: 0;
+  box-shadow: 0 0 6px var(--stage-color, var(--c-default));
 }
 
 .stage-name {
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text);
 }
@@ -303,21 +350,19 @@ body {
 
 .act-row:hover { background: var(--card-hover); }
 
-/* Circular avatar/initial badge */
 .act-avatar {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: var(--stage-color, var(--c-default));
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
+  color: #000;
+  font-size: 12px;
+  font-weight: 800;
   letter-spacing: -0.01em;
-  opacity: 0.9;
 }
 
 .act-info { flex: 1; min-width: 0; }
@@ -333,32 +378,33 @@ body {
 }
 
 .act-time {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 400;
   color: var(--text-muted);
   margin-top: 2px;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
 }
 
 .act-type {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--stage-color, var(--c-default));
   flex-shrink: 0;
-  opacity: 0.8;
 }
 
 .act-row--past {
-  opacity: 0.45;
+  opacity: 0.38;
 }
+
+/* ── Bell button (list) ── */
 
 .bell-btn {
   background: none;
   border: none;
   padding: 6px;
-  margin-left: 4px;
+  margin-left: 2px;
   cursor: pointer;
   color: var(--text-dim);
   flex-shrink: 0;
@@ -384,29 +430,29 @@ body {
   stroke: var(--accent);
 }
 
-/* Bell inside timeline blocks — white on coloured background */
+/* Bell inside timeline blocks */
 .bell-btn--block {
   position: absolute;
   top: 4px;
   right: 4px;
   padding: 3px;
   margin-left: 0;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(0,0,0,0.4);
   border-radius: 4px;
 }
 
 .bell-btn--block:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.2);
+  color: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.15);
 }
 
 .bell-btn--block.set {
-  color: #fff;
+  color: rgba(0,0,0,0.85);
 }
 
 .bell-btn--block.set svg path:first-child {
-  fill: #fff;
-  stroke: #fff;
+  fill: rgba(0,0,0,0.85);
+  stroke: rgba(0,0,0,0.85);
 }
 
 /* ============================================================
@@ -417,9 +463,8 @@ body {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border-radius: var(--radius);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-lg);
-  background: var(--card);
+  border: 1px solid var(--border-green);
+  background: var(--surface);
 }
 
 .timeline-inner {
@@ -431,7 +476,7 @@ body {
 
 .timeline-ruler {
   display: flex;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-strong);
   background: var(--surface);
   position: sticky;
   top: 0;
@@ -442,9 +487,9 @@ body {
   flex: 1;
   padding: 9px 8px;
   font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-  letter-spacing: 0.04em;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.06em;
   border-right: 1px solid var(--border);
   white-space: nowrap;
 }
@@ -453,9 +498,7 @@ body {
 
 /* ── Stage groups ── */
 
-.timeline-stages {
-  position: relative;
-}
+.timeline-stages { position: relative; }
 
 .timeline-stage {
   border-bottom: 1px solid var(--border);
@@ -463,18 +506,16 @@ body {
 
 .timeline-stage:last-child { border-bottom: none; }
 
-/* Stage name as a full-width header above the blocks */
 .timeline-stage-header {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
 
-/* The name wrap is sticky so it pins to the left as you scroll sideways */
 .timeline-stage-name-wrap {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 9px 16px;
+  padding: 8px 16px;
   position: sticky;
   left: 0;
   background: var(--surface);
@@ -487,14 +528,15 @@ body {
   border-radius: 50%;
   background: var(--stage-color, var(--c-default));
   flex-shrink: 0;
+  box-shadow: 0 0 5px var(--stage-color, var(--c-default));
 }
 
 .timeline-stage-name {
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text);
+  color: var(--text-muted);
 }
 
 /* ── Track ── */
@@ -507,8 +549,8 @@ body {
     to right,
     transparent 0,
     transparent calc(var(--tick-pct, 12.5%) - 1px),
-    var(--border) calc(var(--tick-pct, 12.5%) - 1px),
-    var(--border) var(--tick-pct, 12.5%)
+    rgba(255,255,255,0.04) calc(var(--tick-pct, 12.5%) - 1px),
+    rgba(255,255,255,0.04) var(--tick-pct, 12.5%)
   );
 }
 
@@ -518,7 +560,7 @@ body {
   position: absolute;
   top: 8px;
   bottom: 8px;
-  border-radius: 8px;
+  border-radius: 7px;
   background: var(--stage-color, var(--c-default));
   display: flex;
   align-items: center;
@@ -527,23 +569,23 @@ body {
   cursor: default;
   transition: filter 0.15s, transform 0.15s;
   min-width: 6px;
-  box-shadow: 0 1px 4px rgba(26,25,8,0.14);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.5);
 }
 
 .tl-block:hover {
-  filter: brightness(1.08);
+  filter: brightness(1.12);
   transform: scaleY(1.06);
   z-index: 20;
 }
 
 .tl-block--past {
-  opacity: 0.4;
-  filter: saturate(0.5);
+  opacity: 0.35;
+  filter: saturate(0.4);
 }
 
 .tl-block--past:hover {
-  opacity: 0.7;
-  filter: saturate(0.7) brightness(1.08);
+  opacity: 0.65;
+  filter: saturate(0.6) brightness(1.1);
 }
 
 .tl-block-inner {
@@ -557,8 +599,8 @@ body {
 
 .tl-block-name {
   font-size: 12px;
-  font-weight: 700;
-  color: #fff;
+  font-weight: 800;
+  color: #000;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -567,8 +609,8 @@ body {
 
 .tl-block-time {
   font-size: 10px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.75);
+  font-weight: 600;
+  color: rgba(0,0,0,0.6);
   white-space: nowrap;
 }
 
@@ -580,11 +622,12 @@ body {
   bottom: calc(100% + 7px);
   left: 50%;
   transform: translateX(-50%);
-  background: var(--text);
-  color: var(--bg);
+  background: #000;
+  color: var(--accent);
+  border: 1px solid var(--border-green);
   font-family: inherit;
-  font-weight: 600;
-  font-size: 12px;
+  font-weight: 700;
+  font-size: 11px;
   padding: 5px 10px;
   border-radius: 6px;
   white-space: nowrap;
@@ -604,21 +647,22 @@ body {
   bottom: 0;
   width: 2px;
   background: var(--accent);
-  box-shadow: 0 0 6px rgba(240,162,24,0.5);
+  box-shadow: 0 0 10px var(--accent-glow), 0 0 3px var(--accent);
   z-index: 8;
   pointer-events: none;
 }
 
 .now-label {
   position: absolute;
-  top: -18px;
+  top: -20px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--accent);
   white-space: nowrap;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 8px var(--accent-glow);
 }
 
 /* ============================================================
@@ -626,15 +670,16 @@ body {
    ============================================================ */
 
 @media (max-width: 480px) {
-  .header-inner { padding: 10px 14px; }
-  .header-title { font-size: 15px; }
-  .day-nav { padding: 8px 14px; }
-  #app { padding: 16px 12px 60px; }
-  .day-btn { padding: 7px 14px; font-size: 12px; }
-  .view-btn { padding: 5px 10px; font-size: 11px; }
-  .act-avatar { width: 36px; height: 36px; font-size: 12px; }
+  .site-header { padding: 16px 12px 12px; }
+  .header-moon { height: 44px; }
+  .header-wordmark { height: 38px; max-width: 200px; }
+  .header-date-img { height: 15px; }
+  .day-nav { padding: 8px 12px; }
+  #app { padding: 14px 10px 60px; }
+  .day-btn { padding: 6px 14px; font-size: 12px; }
+  .view-btn { padding: 5px 9px; font-size: 11px; }
+  .act-avatar { width: 34px; height: 34px; font-size: 11px; }
   .act-name { font-size: 14px; }
-  .timeline-stage-label { width: 112px; min-width: 112px; padding: 0 10px; }
 }
 
 /* On desktop, don't collapse stages */
