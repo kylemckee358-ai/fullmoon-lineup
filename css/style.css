@@ -308,9 +308,7 @@ body::before {
 }
 
 .stage-count {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-dim);
+  display: none;
 }
 
 .stage-chevron {

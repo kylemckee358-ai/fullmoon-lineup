@@ -152,7 +152,6 @@ function renderLineupView(day) {
     grouped[stage].sort((a, b) => a.start.localeCompare(b.start));
   }
 
-  const isMobile = window.innerWidth < 768;
   const dateLabel = LINEUP_DATA.dates[day] || day;
 
   const nowMinsL  = new Date().getHours() * 60 + new Date().getMinutes();
@@ -165,7 +164,7 @@ function renderLineupView(day) {
     if (!list || list.length === 0) continue;
 
     const colour = stageColour(stage);
-    const collapseClass = isMobile ? 'collapsed' : '';
+    const collapseClass = '';
 
     html += `
       <div class="stage-section ${collapseClass}" style="--stage-color:${colour}">
