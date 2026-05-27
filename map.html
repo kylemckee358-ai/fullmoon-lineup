@@ -42,6 +42,52 @@
       line-height: 1.5;
     }
 
+    /* Opacity slider */
+    #opacity-control {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: #141414;
+      border: 1px solid rgba(42,255,0,0.3);
+      border-radius: 10px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      white-space: nowrap;
+    }
+    #opacity-control label { color: #2AFF00; font-weight: 600; }
+    #opacity-slider {
+      -webkit-appearance: none;
+      width: 140px;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.15);
+      outline: none;
+    }
+    #opacity-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #2AFF00;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(42,255,0,0.6);
+    }
+    #opacity-slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #2AFF00;
+      cursor: pointer;
+      border: none;
+    }
+
     /* Neon green custom marker */
     .fmf-pin {
       width: 22px;
@@ -71,10 +117,16 @@
 
   <div id="map"></div>
 
+  <div id="opacity-control">
+    <label for="opacity-slider">Map Opacity</label>
+    <input type="range" id="opacity-slider" min="0" max="1" step="0.01" value="1">
+    <span id="opacity-value">100%</span>
+  </div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    const LAT = 54.1408;
-    const LNG = -4.4901;
+    const LAT = 54.13855273175324;
+    const LNG = -4.542921268817676;
 
     const map = L.map('map').setView([LAT, LNG], 15);
 
@@ -90,6 +142,31 @@
       iconSize: [22, 22],
       iconAnchor: [11, 22],
       popupAnchor: [0, -24]
+    });
+
+    // 650m × 650m bounds centred on LAT/LNG, shifted 50m north
+    // ~0.002920° lat per 325m, ~0.004975° lng per 325m at this latitude
+    const svgBounds = [
+      [LAT - 0.002920 + 0.000449 - 0.000180, LNG - 0.004975 - 0.000765],
+      [LAT + 0.002920 + 0.000449 - 0.000180, LNG + 0.004975 - 0.000765]
+    ];
+    const RotatedOverlay = L.ImageOverlay.extend({
+      _reset: function () {
+        L.ImageOverlay.prototype._reset.call(this);
+        const el = this._image;
+        const rot = this.options.rotation || 0;
+        el.style.transformOrigin = 'center';
+        el.style.transform += ' rotate(' + rot + 'deg)';
+      }
+    });
+
+    const svgOverlay = new RotatedOverlay('Assets/MAP.svg', svgBounds, { opacity: 1, rotation: 0 }).addTo(map);
+
+    const slider = document.getElementById('opacity-slider');
+    const opacityLabel = document.getElementById('opacity-value');
+    slider.addEventListener('input', () => {
+      svgOverlay.setOpacity(slider.value);
+      opacityLabel.textContent = Math.round(slider.value * 100) + '%';
     });
 
     L.marker([LAT, LNG], { icon: pinIcon })
