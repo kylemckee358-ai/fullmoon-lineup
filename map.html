@@ -31,10 +31,12 @@
       display: inline-block;
       transform-origin: 0 0;
     }
-    #map-inner img {
+    #map-inner object {
       display: block;
       width: 4000px;
       height: 4000px;
+      pointer-events: none;
+      border: 0;
     }
 
     /* ── Sidebar — absolute inside #map-area ── */
@@ -379,7 +381,7 @@
     <!-- Map canvas -->
     <div id="map-viewport">
       <div id="map-inner">
-        <img src="Assets/NEW MAP.svg?v=2" alt="Full Moon Festival site map" draggable="false">
+        <object type="image/svg+xml" data="Assets/NEW%20MAP.svg" aria-label="Full Moon Festival site map"></object>
       </div>
     </div>
 
@@ -456,9 +458,8 @@
     function fitToViewport() {
       const vw = viewport.clientWidth;
       const vh = viewport.clientHeight;
-      const img = inner.querySelector('img');
-      imgW = img.naturalWidth  || img.clientWidth  || 4000;
-      imgH = img.naturalHeight || img.clientHeight || 4000;
+      imgW = 4000;
+      imgH = 4000;
       scale = Math.max(vw / imgW, vh / imgH);
       minScale = scale;
       tx = (vw - imgW * scale) / 2;
@@ -467,8 +468,10 @@
       applyTransform();
     }
 
-    inner.querySelector('img').addEventListener('load', fitToViewport);
-    if (inner.querySelector('img').complete) fitToViewport();
+    const mapObj = inner.querySelector('object');
+    mapObj.addEventListener('load', fitToViewport);
+    // Fallback: fire immediately after a short tick in case load already fired
+    setTimeout(fitToViewport, 0);
 
     viewport.addEventListener('wheel', e => {
       e.preventDefault();
