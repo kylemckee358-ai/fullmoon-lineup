@@ -13,7 +13,8 @@ const STAGE_COLOURS = {
   'Hot Wax':           '#FFD100',
   'Volume':            '#20A5FF',
   'RoomTour':          '#FF4488',
-  'The Pub':           '#6EF9F5'
+  'The Pub':           '#6EF9F5',
+  'Wellness Village':  '#00FFCC'
 };
 
 const DEFAULT_COLOUR = '#888888';
