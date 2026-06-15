@@ -7,13 +7,14 @@ const OUTPUT_PATH = path.resolve(__dirname, '../data/lineup.js');
 
 const STAGE_ORDER = [
   'Outdoor Main Stage',
+  'The Pub',
   'Bunka',
   'Groove2Funk',
   'ReVival',
   'Hot Wax',
   'Volume',
   'RoomTour',
-  'The Pub'
+  'Wellness Village'
 ];
 
 // Normalise stage names from spreadsheet to canonical names
@@ -104,8 +105,8 @@ function main() {
 
     const stageRaw = row['Stage Name'] || row['Stage'] || '';
     const dayRaw = row['Day Act is On'] || row['Day'] || '';
-    const startRaw = row['Time Start'] || row['Start'] || '';
-    const stopRaw = row['Time Stop'] || row['Stop'] || row['End'] || '';
+    const startRaw = row['Time Start'] ?? row['Start'] ?? '';
+    const stopRaw = row['Time Stop'] ?? row['Stop'] ?? row['End'] ?? '';
     const typeRaw = row['Description - Band or DJ'] || row['Description'] || row['Type'] || '';
 
     const day = normaliseDay(dayRaw);

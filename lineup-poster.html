@@ -8,31 +8,123 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/home.css">
   <style>
-    .poster-wrap {
-      padding: 16px 16px 48px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
+    .posters-page {
+      padding: 24px 16px 60px;
+      max-width: 1100px;
+      margin: 0 auto;
     }
-    .poster-img {
+
+    /* ── Main festival poster ── */
+    .poster-featured {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 36px;
+    }
+    .poster-featured img {
       width: 100%;
-      max-width: 540px;
+      max-width: 480px;
       height: auto;
       display: block;
       border-radius: 10px;
-      box-shadow: 0 4px 40px rgba(42,255,0,0.15);
+      box-shadow: 0 4px 48px rgba(42,255,0,0.18);
+      cursor: zoom-in;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .poster-back {
-      font-size: 14px;
-      font-weight: 600;
+    .poster-featured img:hover {
+      transform: scale(1.01);
+      box-shadow: 0 8px 64px rgba(42,255,0,0.28);
+    }
+
+    /* ── Section heading ── */
+    .posters-section-heading {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       color: var(--accent);
-      text-decoration: none;
-      letter-spacing: 0.02em;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-green);
     }
-    .poster-back:hover { text-decoration: underline; }
+
+    /* ── Stage posters grid ── */
+    .poster-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    @media (min-width: 600px) {
+      .poster-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (min-width: 900px) {
+      .poster-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    }
+
+    .poster-card {
+      display: block;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--card);
+      cursor: zoom-in;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .poster-card:hover {
+      border-color: var(--border-green);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 32px rgba(42,255,0,0.14);
+    }
+    .poster-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .poster-card-label {
+      padding: 8px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Lightbox ── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      cursor: zoom-out;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 8px 80px rgba(0,0,0,0.8);
+    }
+    #lightbox-close {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.5);
+      font-size: 28px;
+      cursor: pointer;
+      line-height: 1;
+      z-index: 201;
+    }
+    #lightbox-close:hover { color: #fff; }
   </style>
 </head>
 <body>
@@ -50,12 +142,97 @@
     <a class="site-nav__link" href="map.html">Map</a>
   </nav>
 
-  <div class="poster-wrap">
-    <img class="poster-img"
-         src="Assets/FMF26 - Festival Poster Portrait.jpg"
-         alt="Full Moon Festival 2026 — Official Lineup Poster">
-    <a class="poster-back" href="index.html">← Timetable</a>
+  <div class="posters-page">
+
+    <!-- Main festival poster -->
+    <div class="poster-featured">
+      <img src="Assets/Posters/FMF26 - Festival Poster Portrait.jpg"
+           alt="Full Moon Festival 2026 — Official Lineup Poster"
+           data-lightbox>
+    </div>
+
+    <!-- Stage posters -->
+    <p class="posters-section-heading">Stage Posters</p>
+    <div class="poster-grid">
+
+      <a class="poster-card" href="#" data-src="Assets/Posters/BUNKA A4 Poster.png">
+        <img src="Assets/Posters/BUNKA A4 Poster.png" alt="Bunka">
+        <div class="poster-card-label">Bunka</div>
+      </a>
+
+      <a class="poster-card" href="#" data-src="Assets/Posters/G2F A4 Poster.png">
+        <img src="Assets/Posters/G2F A4 Poster.png" alt="Groove 2 Funk">
+        <div class="poster-card-label">Groove 2 Funk</div>
+      </a>
+
+      <a class="poster-card" href="#" data-src="Assets/Posters/HOT WAX A4 Poster.png">
+        <img src="Assets/Posters/HOT WAX A4 Poster.png" alt="Hot Wax">
+        <div class="poster-card-label">Hot Wax</div>
+      </a>
+
+      <a class="poster-card" href="#" data-src="Assets/Posters/PUB & OUTDOOR STAGE A4 Poster.png">
+        <img src="Assets/Posters/PUB & OUTDOOR STAGE A4 Poster.png" alt="Pub & Outdoor Stage">
+        <div class="poster-card-label">Pub &amp; Outdoor Stage</div>
+      </a>
+
+      <a class="poster-card" href="#" data-src="Assets/Posters/REVIVAL A4 Poster.png">
+        <img src="Assets/Posters/REVIVAL A4 Poster.png" alt="ReVival">
+        <div class="poster-card-label">ReVival</div>
+      </a>
+
+      <a class="poster-card" href="#" data-src="Assets/Posters/ROOM TOUR A4 Poster.png">
+        <img src="Assets/Posters/ROOM TOUR A4 Poster.png" alt="Room Tour">
+        <div class="poster-card-label">Room Tour</div>
+      </a>
+
+      <a class="poster-card" href="#" data-src="Assets/Posters/WELLNESS VILLAGE A4 Poster.png">
+        <img src="Assets/Posters/WELLNESS VILLAGE A4 Poster.png" alt="Wellness Village">
+        <div class="poster-card-label">Wellness Village</div>
+      </a>
+
+    </div>
   </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox">
+    <button id="lightbox-close" aria-label="Close">✕</button>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
+  <script>
+    const lightbox    = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    function openLightbox(src, alt) {
+      lightboxImg.src = src;
+      lightboxImg.alt = alt || '';
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Main poster click
+    document.querySelector('[data-lightbox]').addEventListener('click', function () {
+      openLightbox(this.src, this.alt);
+    });
+
+    // Stage poster cards
+    document.querySelectorAll('.poster-card').forEach(card => {
+      card.addEventListener('click', e => {
+        e.preventDefault();
+        openLightbox(card.dataset.src, card.querySelector('img').alt);
+      });
+    });
+
+    // Close lightbox
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  </script>
 
 </body>
 </html>

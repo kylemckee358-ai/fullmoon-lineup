@@ -11,10 +11,14 @@ const LINEUP_DATA = {
   },
   "stages": [
     "Outdoor Main Stage",
+    "The Pub",
+    "Bunka",
     "Groove2Funk",
+    "ReVival",
     "Hot Wax",
     "Volume",
-    "The Pub"
+    "RoomTour",
+    "Wellness Village"
   ],
   "acts": [
     {
@@ -58,6 +62,86 @@ const LINEUP_DATA = {
       "type": "Band"
     },
     {
+      "name": "TBA",
+      "stage": "The Pub",
+      "day": "Friday",
+      "start": "15:15",
+      "end": "15:45",
+      "type": "Band"
+    },
+    {
+      "name": "The Dub Lhunes - The Dubbons",
+      "stage": "The Pub",
+      "day": "Friday",
+      "start": "16:15",
+      "end": "17:45",
+      "type": "Band"
+    },
+    {
+      "name": "CUNF",
+      "stage": "The Pub",
+      "day": "Friday",
+      "start": "18:15",
+      "end": "19:45",
+      "type": "Band"
+    },
+    {
+      "name": "Clash Vooar",
+      "stage": "The Pub",
+      "day": "Friday",
+      "start": "20:15",
+      "end": "21:45",
+      "type": "Band"
+    },
+    {
+      "name": "A Stones Throw",
+      "stage": "The Pub",
+      "day": "Friday",
+      "start": "22:15",
+      "end": "23:45",
+      "type": "Band"
+    },
+    {
+      "name": "Bunka B2B2B",
+      "stage": "Bunka",
+      "day": "Friday",
+      "start": "15:00",
+      "end": "18:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Pippy",
+      "stage": "Bunka",
+      "day": "Friday",
+      "start": "18:00",
+      "end": "19:30",
+      "type": "DJ"
+    },
+    {
+      "name": "Rachel Pardoe",
+      "stage": "Bunka",
+      "day": "Friday",
+      "start": "19:30",
+      "end": "21:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Scott Hoy",
+      "stage": "Bunka",
+      "day": "Friday",
+      "start": "21:00",
+      "end": "22:30",
+      "type": "DJ"
+    },
+    {
+      "name": "Parker",
+      "stage": "Bunka",
+      "day": "Friday",
+      "start": "22:30",
+      "end": "23:45",
+      "type": "DJ"
+    },
+    {
       "name": "G2F",
       "stage": "Groove2Funk",
       "day": "Friday",
@@ -70,7 +154,7 @@ const LINEUP_DATA = {
       "stage": "Groove2Funk",
       "day": "Friday",
       "start": "14:00",
-      "end": "15:00",
+      "end": "16:00",
       "type": "DJ"
     },
     {
@@ -90,10 +174,74 @@ const LINEUP_DATA = {
       "type": "DJ"
     },
     {
-      "name": "Barry/ Matty Brand etc / DnB",
+      "name": "Barry Fearon",
       "stage": "Groove2Funk",
       "day": "Friday",
-      "start": "19:30",
+      "start": "21:30",
+      "end": "22:30",
+      "type": "DJ"
+    },
+    {
+      "name": "Matty B",
+      "stage": "Groove2Funk",
+      "day": "Friday",
+      "start": "22:30",
+      "end": "23:45",
+      "type": "DJ"
+    },
+    {
+      "name": "Mix Tape",
+      "stage": "ReVival",
+      "day": "Friday",
+      "start": "14:00",
+      "end": "15:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Travis",
+      "stage": "ReVival",
+      "day": "Friday",
+      "start": "15:00",
+      "end": "16:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Niel Cowie",
+      "stage": "ReVival",
+      "day": "Friday",
+      "start": "16:00",
+      "end": "17:30",
+      "type": "DJ"
+    },
+    {
+      "name": "Kim Bezance",
+      "stage": "ReVival",
+      "day": "Friday",
+      "start": "17:30",
+      "end": "19:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Colin Cowie",
+      "stage": "ReVival",
+      "day": "Friday",
+      "start": "19:00",
+      "end": "20:30",
+      "type": "DJ"
+    },
+    {
+      "name": "Neil Cowie",
+      "stage": "ReVival",
+      "day": "Friday",
+      "start": "20:30",
+      "end": "21:45",
+      "type": "DJ"
+    },
+    {
+      "name": "Ricky Rooney",
+      "stage": "ReVival",
+      "day": "Friday",
+      "start": "21:45",
       "end": "23:45",
       "type": "DJ"
     },
@@ -147,43 +295,59 @@ const LINEUP_DATA = {
     },
     {
       "name": "TBA",
-      "stage": "The Pub",
+      "stage": "RoomTour",
       "day": "Friday",
-      "start": "15:15",
-      "end": "15:45",
-      "type": "Band"
+      "start": "14:45",
+      "end": "16:00",
+      "type": "DJ"
     },
     {
-      "name": "The Dub Lhunes - The Dubbons",
-      "stage": "The Pub",
+      "name": "Tom Caine",
+      "stage": "RoomTour",
       "day": "Friday",
-      "start": "16:15",
-      "end": "17:45",
-      "type": "Band"
+      "start": "16:00",
+      "end": "17:15",
+      "type": "DJ"
     },
     {
-      "name": "CUNF",
-      "stage": "The Pub",
+      "name": "Travis Bradshaw",
+      "stage": "RoomTour",
       "day": "Friday",
-      "start": "18:15",
+      "start": "17:15",
+      "end": "18:30",
+      "type": "DJ"
+    },
+    {
+      "name": "Will Mosley",
+      "stage": "RoomTour",
+      "day": "Friday",
+      "start": "18:30",
       "end": "19:45",
-      "type": "Band"
+      "type": "DJ"
     },
     {
-      "name": "Clash Vooar",
-      "stage": "The Pub",
+      "name": "Jacob Kneale",
+      "stage": "RoomTour",
       "day": "Friday",
-      "start": "20:15",
-      "end": "21:45",
-      "type": "Band"
+      "start": "19:45",
+      "end": "21:00",
+      "type": "DJ"
     },
     {
-      "name": "A Stones Throw",
-      "stage": "The Pub",
+      "name": "Jaime Craig",
+      "stage": "RoomTour",
+      "day": "Friday",
+      "start": "21:00",
+      "end": "22:15",
+      "type": "DJ"
+    },
+    {
+      "name": "RoomTour",
+      "stage": "RoomTour",
       "day": "Friday",
       "start": "22:15",
       "end": "23:45",
-      "type": "Band"
+      "type": "DJ"
     },
     {
       "name": "Spotty Dog",
@@ -238,7 +402,127 @@ const LINEUP_DATA = {
       "stage": "Outdoor Main Stage",
       "day": "Saturday",
       "start": "23:30",
-      "end": "00:30",
+      "end": "00:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Reservoir Rodeo",
+      "stage": "The Pub",
+      "day": "Saturday",
+      "start": "13:15",
+      "end": "14:15",
+      "type": "Band"
+    },
+    {
+      "name": "Lady’s Darts",
+      "stage": "The Pub",
+      "day": "Saturday",
+      "start": "14:45",
+      "end": "16:15",
+      "type": "Band"
+    },
+    {
+      "name": "Red Hot Chilli Yessirs",
+      "stage": "The Pub",
+      "day": "Saturday",
+      "start": "16:45",
+      "end": "18:15",
+      "type": "Band"
+    },
+    {
+      "name": "Index of Alice",
+      "stage": "The Pub",
+      "day": "Saturday",
+      "start": "18:45",
+      "end": "20:15",
+      "type": "Band"
+    },
+    {
+      "name": "Shark",
+      "stage": "The Pub",
+      "day": "Saturday",
+      "start": "20:45",
+      "end": "22:15",
+      "type": "Band"
+    },
+    {
+      "name": "Lizzy and the Bifters",
+      "stage": "The Pub",
+      "day": "Saturday",
+      "start": "22:45",
+      "end": "00:00",
+      "type": "Band"
+    },
+    {
+      "name": "Hendo",
+      "stage": "Bunka",
+      "day": "Saturday",
+      "start": "13:00",
+      "end": "14:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Pippy",
+      "stage": "Bunka",
+      "day": "Saturday",
+      "start": "14:00",
+      "end": "15:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Dan & Parker",
+      "stage": "Bunka",
+      "day": "Saturday",
+      "start": "15:00",
+      "end": "16:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Tapman B2B Travis",
+      "stage": "Bunka",
+      "day": "Saturday",
+      "start": "16:00",
+      "end": "17:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Cav Cavendish",
+      "stage": "Bunka",
+      "day": "Saturday",
+      "start": "17:00",
+      "end": "18:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Hoff",
+      "stage": "Bunka",
+      "day": "Saturday",
+      "start": "18:00",
+      "end": "19:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Cameron",
+      "stage": "Bunka",
+      "day": "Saturday",
+      "start": "19:00",
+      "end": "20:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Dan & Hendo",
+      "stage": "Bunka",
+      "day": "Saturday",
+      "start": "20:00",
+      "end": "21:30",
+      "type": "DJ"
+    },
+    {
+      "name": "Bunka B2B2B",
+      "stage": "Bunka",
+      "day": "Saturday",
+      "start": "22:00",
+      "end": "23:45",
       "type": "DJ"
     },
     {
@@ -295,6 +579,46 @@ const LINEUP_DATA = {
       "day": "Saturday",
       "start": "20:30",
       "end": "23:45",
+      "type": "DJ"
+    },
+    {
+      "name": "Neil Cowie",
+      "stage": "ReVival",
+      "day": "Saturday",
+      "start": "14:00",
+      "end": "16:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Robyn Freestone",
+      "stage": "ReVival",
+      "day": "Saturday",
+      "start": "16:00",
+      "end": "18:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Kim Bezance",
+      "stage": "ReVival",
+      "day": "Saturday",
+      "start": "18:00",
+      "end": "19:30",
+      "type": "DJ"
+    },
+    {
+      "name": "Roy Campbell",
+      "stage": "ReVival",
+      "day": "Saturday",
+      "start": "19:30",
+      "end": "20:45",
+      "type": "DJ"
+    },
+    {
+      "name": "Colin Cowie B2B Neil Cowie",
+      "stage": "ReVival",
+      "day": "Saturday",
+      "start": "20:45",
+      "end": "00:00",
       "type": "DJ"
     },
     {
@@ -370,44 +694,148 @@ const LINEUP_DATA = {
       "type": "DJ"
     },
     {
-      "name": "Reservoir Rodeo",
-      "stage": "The Pub",
+      "name": "Kyle McKee",
+      "stage": "Volume",
       "day": "Saturday",
-      "start": "13:15",
-      "end": "14:15",
+      "start": "22:45",
+      "end": "00:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Freesoul",
+      "stage": "RoomTour",
+      "day": "Saturday",
+      "start": "12:45",
+      "end": "14:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Tom Caine",
+      "stage": "RoomTour",
+      "day": "Saturday",
+      "start": "14:00",
+      "end": "15:15",
+      "type": "DJ"
+    },
+    {
+      "name": "Otty",
+      "stage": "RoomTour",
+      "day": "Saturday",
+      "start": "15:15",
+      "end": "16:30",
+      "type": "DJ"
+    },
+    {
+      "name": "Will Mosley",
+      "stage": "RoomTour",
+      "day": "Saturday",
+      "start": "16:30",
+      "end": "17:45",
+      "type": "DJ"
+    },
+    {
+      "name": "PMIX",
+      "stage": "RoomTour",
+      "day": "Saturday",
+      "start": "17:45",
+      "end": "18:45",
+      "type": "DJ"
+    },
+    {
+      "name": "Burg",
+      "stage": "RoomTour",
+      "day": "Saturday",
+      "start": "18:45",
+      "end": "20:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Petz",
+      "stage": "RoomTour",
+      "day": "Saturday",
+      "start": "20:00",
+      "end": "22:00",
+      "type": "DJ"
+    },
+    {
+      "name": "PK B2B Roomtour",
+      "stage": "RoomTour",
+      "day": "Saturday",
+      "start": "22:00",
+      "end": "00:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Alice Dudley",
+      "stage": "The Pub",
+      "day": "Sunday",
+      "start": "13:30",
+      "end": "14:45",
       "type": "Band"
     },
     {
-      "name": "Lady’s Darts",
+      "name": "The Uninvited",
       "stage": "The Pub",
-      "day": "Saturday",
-      "start": "14:45",
-      "end": "16:15",
+      "day": "Sunday",
+      "start": "15:15",
+      "end": "16:30",
       "type": "Band"
     },
     {
-      "name": "Red Hot Chilli Yessirs",
+      "name": "Ideal Forgery",
       "stage": "The Pub",
-      "day": "Saturday",
-      "start": "16:45",
+      "day": "Sunday",
+      "start": "17:00",
       "end": "18:15",
       "type": "Band"
     },
     {
-      "name": "Index of Alice",
+      "name": "Mother Funkers",
       "stage": "The Pub",
-      "day": "Saturday",
+      "day": "Sunday",
       "start": "18:45",
-      "end": "20:15",
+      "end": "20:00",
       "type": "Band"
     },
     {
-      "name": "Shark",
+      "name": "Silent Disco",
       "stage": "The Pub",
-      "day": "Saturday",
-      "start": "20:45",
-      "end": "22:15",
-      "type": "Band"
+      "day": "Sunday",
+      "start": "20:00",
+      "end": "22:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Nathan & Cal",
+      "stage": "Bunka",
+      "day": "Sunday",
+      "start": "13:00",
+      "end": "15:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Parker",
+      "stage": "Bunka",
+      "day": "Sunday",
+      "start": "15:00",
+      "end": "16:15",
+      "type": "DJ"
+    },
+    {
+      "name": "Hoff",
+      "stage": "Bunka",
+      "day": "Sunday",
+      "start": "16:15",
+      "end": "17:30",
+      "type": "DJ"
+    },
+    {
+      "name": "Bunka B2B2B",
+      "stage": "Bunka",
+      "day": "Sunday",
+      "start": "17:30",
+      "end": "19:00",
+      "type": "DJ"
     },
     {
       "name": "Seb (Electronic Acoustic)",
@@ -438,6 +866,30 @@ const LINEUP_DATA = {
       "stage": "Groove2Funk",
       "day": "Sunday",
       "start": "18:00",
+      "end": "19:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Roy Campbell",
+      "stage": "ReVival",
+      "day": "Sunday",
+      "start": "12:00",
+      "end": "14:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Robyn Freestone",
+      "stage": "ReVival",
+      "day": "Sunday",
+      "start": "14:00",
+      "end": "16:00",
+      "type": "DJ"
+    },
+    {
+      "name": "All Stars B2B2B2B",
+      "stage": "ReVival",
+      "day": "Sunday",
+      "start": "16:00",
       "end": "19:00",
       "type": "DJ"
     },
@@ -474,36 +926,44 @@ const LINEUP_DATA = {
       "type": "DJ"
     },
     {
-      "name": "Alice Dudley",
-      "stage": "The Pub",
+      "name": "RoomTour + Friends",
+      "stage": "RoomTour",
       "day": "Sunday",
-      "start": "13:30",
-      "end": "14:45",
-      "type": "Band"
+      "start": "12:00",
+      "end": "19:00",
+      "type": "DJ"
     },
     {
-      "name": "The Uninvited",
-      "stage": "The Pub",
+      "name": "Ecstatic Dance With Rosemary",
+      "stage": "Wellness Village",
       "day": "Sunday",
-      "start": "15:15",
-      "end": "16:30",
-      "type": "Band"
+      "start": "10:00",
+      "end": "10:55",
+      "type": "DJ"
     },
     {
-      "name": "Ideal Forgery",
-      "stage": "The Pub",
+      "name": "Slow Flow Yoga With Leanne",
+      "stage": "Wellness Village",
       "day": "Sunday",
-      "start": "17:00",
-      "end": "18:15",
-      "type": "Band"
+      "start": "11:00",
+      "end": "11:30",
+      "type": "DJ"
     },
     {
-      "name": "Mother Funkers",
-      "stage": "The Pub",
+      "name": "Live Guided Meditation",
+      "stage": "Wellness Village",
       "day": "Sunday",
-      "start": "18:45",
-      "end": "22:00",
-      "type": "Band"
+      "start": "11:30",
+      "end": "12:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Open Chill Zone",
+      "stage": "Wellness Village",
+      "day": "Sunday",
+      "start": "12:00",
+      "end": "14:00",
+      "type": "DJ"
     }
   ]
 };

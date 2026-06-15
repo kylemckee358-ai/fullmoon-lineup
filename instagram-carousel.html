@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instagram Carousel — The FullMoon Festival App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1a1a;
+      font-family: 'Inter', sans-serif;
+      padding: 40px 20px 80px;
+    }
+
+    .page-title {
+      text-align: center;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .page-sub {
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 12px;
+      margin-bottom: 40px;
+    }
+
+    .slides {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .slide-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slide-label {
+      color: rgba(255,255,255,0.35);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .slide {
+      width: 540px;
+      height: 675px; /* 1080×1350 at half scale — 4:5 portrait */
+      position: relative;
+      overflow: hidden;
+      background: #000;
+      flex-shrink: 0;
+    }
+
+    /* ── Shared ── */
+    .slide-num {
+      position: relative;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #2AFF00;
+      margin-bottom: 12px;
+      opacity: 0.8;
+    }
+    .slide-headline {
+      position: relative;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #fff;
+      letter-spacing: -0.01em;
+      line-height: 0.9;
+      margin-bottom: 12px;
+    }
+    .slide-headline.large  { font-size: 64px; }
+    .slide-headline.medium { font-size: 50px; }
+    .slide-headline.small  { font-size: 40px; }
+    .slide-headline span   { color: #2AFF00; }
+    .slide-body {
+      position: relative;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.65;
+      margin-bottom: 20px;
+      max-width: 280px;
+    }
+
+    /* ─────────────────────────────────────────
+       SLIDE 1 — HERO
+    ───────────────────────────────────────── */
+    .s1 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 70px 44px;
+    }
+    .s1::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 40%, rgba(42,255,0,0.13) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 80% 80%, rgba(42,255,0,0.06) 0%, transparent 60%);
+    }
+    .s1-corner {
+      position: absolute;
+      top: 22px;
+      left: 26px;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #2AFF00;
+      opacity: 0.6;
+    }
+    .s1-eyebrow {
+      position: relative;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #2AFF00;
+      margin-bottom: 18px;
+    }
+    .s1-title {
+      position: relative;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 70px;
+      font-weight: 900;
+      line-height: 0.88;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 22px;
+    }
+    .s1-title span { color: #2AFF00; }
+    .s1-divider {
+      position: relative;
+      width: 40px;
+      height: 2px;
+      background: #2AFF00;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 12px rgba(42,255,0,0.6);
+    }
+    .s1-sub {
+      position: relative;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.6;
+      max-width: 300px;
+      margin: 0 auto 28px;
+    }
+    .s1-pills {
+      position: relative;
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .s1-pill {
+      border: 1px solid rgba(42,255,0,0.28);
+      border-radius: 999px;
+      padding: 5px 13px;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+    .s1-swipe {
+      position: absolute;
+      bottom: 22px;
+      right: 26px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+    }
+
+    /* ─────────────────────────────────────────
+       SLIDE 2 — TIMETABLE LIST VIEW
+    ───────────────────────────────────────── */
+    .s2 {
+      display: flex;
+      flex-direction: column;
+      padding: 48px 40px 40px;
+    }
+    .s2::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 10% 90%, rgba(42,255,0,0.07) 0%, transparent 70%);
+    }
+
+    /* List mockup */
+    .list-mock {
+      position: relative;
+      flex: 1;
+      background: #0d0d0d;
+      border: 1px solid rgba(42,255,0,0.15);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* ── Accurate day-nav bar ── */
+    .daynav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(42,255,0,0.18);
+      background: rgba(0,0,0,0.92);
+      flex-shrink: 0;
+    }
+    .daynav-days { display: flex; gap: 6px; }
+    .daynav-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 999px;
+      padding: 5px 13px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.52);
+    }
+    .daynav-btn.active {
+      background: #2AFF00;
+      border-color: #2AFF00;
+      color: #000;
+      box-shadow: 0 0 10px rgba(42,255,0,0.45);
+    }
+    .view-toggle-mock {
+      display: flex;
+      background: #141414;
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 6px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .vbtn-mock {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 9px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.52);
+    }
+    .vbtn-mock svg { width: 12px; height: 12px; flex-shrink: 0; }
+    .vbtn-mock.active { background: #2AFF00; color: #000; font-weight: 700; }
+
+    .list-stages { padding: 8px 10px; display: flex; flex-direction: column; gap: 5px; flex: 1; overflow: hidden; }
+    .list-stage-block {
+      background: rgba(255,255,255,0.04);
+      border-radius: 7px;
+      overflow: hidden;
+    }
+    .list-stage-hdr {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .list-pip { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .list-stage-name { font-size: 9px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+    .list-acts { display: flex; flex-direction: column; }
+    .list-act {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .list-act-avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8px; font-weight: 800; color: #000; flex-shrink: 0;
+    }
+    .list-act-info { flex: 1; }
+    .list-act-name { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.85); }
+    .list-act-time { font-size: 8.5px; color: rgba(255,255,255,0.35); margin-top: 1px; }
+    .list-bell {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .list-bell.set { border-color: #2AFF00; background: rgba(42,255,0,0.1); }
+    .list-bell svg { width: 10px; height: 10px; }
+
+    /* ─────────────────────────────────────────
+       SLIDE 3 — TIMETABLE BLOCK VIEW
+    ───────────────────────────────────────── */
+    .s3 {
+      display: flex;
+      flex-direction: column;
+      padding: 36px 32px 32px;
+    }
+    .s3::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 90% 10%, rgba(42,255,0,0.07) 0%, transparent 70%);
+    }
+
+    /* Accurate block/timeline mockup */
+    .bview {
+      position: relative;
+      flex: 1;
+      background: #0d0d0d;
+      border: 1px solid rgba(42,255,0,0.15);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .bruler {
+      display: flex;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: #0d0d0d;
+      flex-shrink: 0;
+    }
+    .bruler-tick {
+      flex: 1;
+      padding: 5px 8px;
+      font-size: 8px;
+      font-weight: 700;
+      color: #2AFF00;
+      letter-spacing: 0.06em;
+      border-right: 1px solid rgba(255,255,255,0.04);
+    }
+    .bruler-tick:last-child { border-right: none; }
+    .bstages {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .bstage { border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; }
+    .bstage:last-child { border-bottom: none; }
+    .bstage-hdr {
+      background: rgba(255,255,255,0.025);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+    }
+    .bstage-pip {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--sc, #888);
+      box-shadow: 0 0 4px var(--sc, #888);
+      flex-shrink: 0;
+    }
+    .bstage-name {
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .btrack {
+      position: relative;
+      height: 44px;
+      background: repeating-linear-gradient(
+        to right,
+        transparent 0, transparent calc(25% - 1px),
+        rgba(255,255,255,0.035) calc(25% - 1px), rgba(255,255,255,0.035) 25%
+      );
+    }
+    .bblock {
+      position: absolute;
+      top: 5px; bottom: 5px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      overflow: hidden;
+    }
+    .bblock-inner { display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
+    .bblock-name { font-size: 8px; font-weight: 800; color: #000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bblock-time { font-size: 6.5px; font-weight: 600; color: rgba(0,0,0,0.55); white-space: nowrap; }
+    .bnow-line {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 1.5px;
+      background: #2AFF00;
+      box-shadow: 0 0 8px rgba(42,255,0,0.7);
+      z-index: 5;
+      pointer-events: none;
+    }
+    .bnow-label {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 7px;
+      font-weight: 800;
+      color: #2AFF00;
+      white-space: nowrap;
+      letter-spacing: 0.04em;
+    }
+
+    /* ─────────────────────────────────────────
+       SLIDE 4 — REMINDERS
+    ───────────────────────────────────────── */
+    .s4 {
+      display: flex;
+      flex-direction: column;
+      padding: 48px 40px 40px;
+    }
+    .s4::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 90%, rgba(42,255,0,0.09) 0%, transparent 70%);
+    }
+    .reminder-mock {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      justify-content: center;
+    }
+    .rem-act {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .rem-act.active { border-color: rgba(42,255,0,0.25); background: rgba(42,255,0,0.05); }
+    .rem-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 800; color: #000; flex-shrink: 0;
+    }
+    .rem-info { flex: 1; }
+    .rem-name { font-size: 11px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+    .rem-time { font-size: 9.5px; color: rgba(255,255,255,0.4); font-weight: 500; }
+    .rem-bell {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .rem-bell.set { border-color: #2AFF00; background: rgba(42,255,0,0.12); }
+    .rem-bell svg { width: 12px; height: 12px; }
+    .rem-hint {
+      position: relative;
+      background: rgba(42,255,0,0.08);
+      border: 1px solid rgba(42,255,0,0.2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #2AFF00;
+      line-height: 1.5;
+    }
+
+    /* ─────────────────────────────────────────
+       SLIDE 5 — MAP
+    ───────────────────────────────────────── */
+    .s5 {
+      display: flex;
+      flex-direction: column;
+      padding: 48px 40px 40px;
+    }
+    .s5::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 90% 10%, rgba(42,255,0,0.08) 0%, transparent 70%);
+    }
+    .map-mock {
+      position: relative;
+      flex: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(42,255,0,0.2);
+    }
+    .map-mock-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('Assets/NEW MAP.svg?v=2');
+      background-size: 150%;
+      background-position: 55% 45%;
+      background-repeat: no-repeat;
+      filter: brightness(0.9);
+    }
+    .map-zoom-chips {
+      position: absolute; bottom: 10px; right: 10px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .map-zoom-chip {
+      width: 28px; height: 28px;
+      background: rgba(0,0,0,0.82);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: #fff;
+    }
+
+    /* ── Map sidebar mock (slide 5) ── */
+    .map-sidebar-mock {
+      position: absolute;
+      top: 8px; left: 8px;
+      width: 128px;
+      background: rgba(10,10,10,0.9);
+      border: 1px solid rgba(42,255,0,0.18);
+      border-radius: 7px;
+      padding: 7px 0 5px;
+      z-index: 5;
+    }
+    .msb-section {
+      padding: 0 8px 5px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 2px;
+    }
+    .msb-section:last-child { border-bottom: none; padding-bottom: 2px; }
+    .msb-heading {
+      font-size: 6px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #2AFF00;
+      margin-bottom: 5px;
+      padding-top: 1px;
+    }
+    .msb-list { display: flex; flex-direction: column; gap: 3px; }
+    .msb-amenity, .msb-stage, .msb-guide {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .msb-icon {
+      width: 15px; height: 15px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .msb-icon svg { width: 7px; height: 7px; fill: rgba(255,255,255,0.75); }
+    .msb-label {
+      font-size: 7px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.2;
+    }
+    .msb-pip {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .msb-dash {
+      width: 16px; height: 2px;
+      flex-shrink: 0;
+      border-radius: 1px;
+      background-image: repeating-linear-gradient(
+        to right,
+        currentColor 0, currentColor 4px,
+        transparent 4px, transparent 7px
+      );
+    }
+
+    /* ─────────────────────────────────────────
+       SLIDE 6 — CTA
+    ───────────────────────────────────────── */
+    .s6 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 70px 44px;
+    }
+    .s6::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(42,255,0,0.1) 0%, transparent 70%);
+    }
+    .s6-icon {
+      position: relative;
+      width: 64px; height: 64px;
+      border: 2px solid #2AFF00; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 22px;
+      box-shadow: 0 0 24px rgba(42,255,0,0.3);
+    }
+    .s6-icon svg { width: 30px; height: 30px; }
+    .s6-label {
+      position: relative;
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: #2AFF00; margin-bottom: 14px;
+    }
+    .s6-headline {
+      position: relative;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 62px; font-weight: 900;
+      text-transform: uppercase; line-height: 0.9;
+      color: #fff; margin-bottom: 24px;
+    }
+    .s6-headline span { color: #2AFF00; }
+    .s6-url {
+      position: relative;
+      background: rgba(42,255,0,0.08);
+      border: 1px solid rgba(42,255,0,0.3);
+      border-radius: 8px; padding: 12px 24px;
+      font-size: 13px; font-weight: 700; color: #fff;
+      letter-spacing: 0.04em; margin-bottom: 20px;
+    }
+    .s6-url span { color: #2AFF00; }
+    .s6-note {
+      position: relative;
+      font-size: 11px; color: rgba(255,255,255,0.3);
+      font-weight: 500; line-height: 1.6;
+    }
+    .s6-festival {
+      position: absolute; bottom: 22px;
+      font-size: 9px; font-weight: 800;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <p class="page-title">The FullMoon Festival App — Instagram Carousel</p>
+  <p class="page-sub">5 slides · Screenshot each one individually · 1080×1350 portrait (4:5) — rendered at 540×675</p>
+
+  <div class="slides">
+
+    <!-- ══════════════════════════════════════
+         SLIDE 1 — HERO
+    ══════════════════════════════════════ -->
+    <div class="slide-wrap">
+      <span class="slide-label">Slide 1 of 5 — Cover</span>
+      <div class="slide s1">
+        <span class="s1-corner">Full Moon Festival 2026</span>
+        <div class="s1-eyebrow">Introducing</div>
+        <div class="s1-title">THE<br>FULLMOON<br><span>FESTIVAL</span><br>APP</div>
+        <div class="s1-divider"></div>
+        <div class="s1-sub">Everything you need for Full Moon 2026 — timetable, lineup, map and reminders — in your pocket.</div>
+        <div class="s1-pills">
+          <span class="s1-pill">Timetable</span>
+          <span class="s1-pill">Lineup</span>
+          <span class="s1-pill">Site Map</span>
+          <span class="s1-pill">Reminders</span>
+        </div>
+        <span class="s1-swipe">Swipe to explore →</span>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SLIDE 2 — TIMETABLE LIST VIEW
+    ══════════════════════════════════════ -->
+    <div class="slide-wrap">
+      <span class="slide-label">Slide 2 of 5 — Timetable: List View</span>
+      <div class="slide s2">
+        <div class="slide-num">01 — Timetable · List View</div>
+        <div class="slide-headline large">WHO'S<br>ON &<br><span>WHEN</span></div>
+        <div class="list-mock">
+          <div class="daynav-bar">
+            <div class="daynav-days">
+              <div class="daynav-btn active">Fri</div>
+              <div class="daynav-btn">Sat</div>
+              <div class="daynav-btn">Sun</div>
+            </div>
+            <div class="view-toggle-mock">
+              <div class="vbtn-mock active">
+                <svg viewBox="0 0 18 18" fill="currentColor"><rect x="2" y="3" width="14" height="2.5" rx="1.25"/><rect x="2" y="7.75" width="14" height="2.5" rx="1.25"/><rect x="2" y="12.5" width="14" height="2.5" rx="1.25"/></svg>
+                list
+              </div>
+              <div class="vbtn-mock">
+                <svg viewBox="0 0 18 18" fill="currentColor"><rect x="2" y="3" width="6" height="5" rx="1.25"/><rect x="10" y="3" width="6" height="5" rx="1.25"/><rect x="2" y="10" width="9" height="5" rx="1.25"/><rect x="13" y="10" width="3" height="5" rx="1.25"/></svg>
+                blocks
+              </div>
+            </div>
+          </div>
+          <div class="list-stages">
+            <div class="list-stage-block">
+              <div class="list-stage-hdr">
+                <div class="list-pip" style="background:#2AFF00; box-shadow:0 0 4px #2AFF00;"></div>
+                <span class="list-stage-name" style="color:#2AFF00;">Outdoor Main Stage</span>
+              </div>
+              <div class="list-acts">
+                <div class="list-act">
+                  <div class="list-act-avatar" style="background:#2AFF00;">OS</div>
+                  <div class="list-act-info">
+                    <div class="list-act-name">Friday Headliner</div>
+                    <div class="list-act-time">22:00 – 00:00</div>
+                  </div>
+                  <div class="list-bell set">
+                    <svg viewBox="0 0 24 24" fill="#2AFF00" stroke="#2AFF00" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  </div>
+                </div>
+                <div class="list-act">
+                  <div class="list-act-avatar" style="background:#2AFF00;">S2</div>
+                  <div class="list-act-info">
+                    <div class="list-act-name">Support Act</div>
+                    <div class="list-act-time">20:00 – 22:00</div>
+                  </div>
+                  <div class="list-bell">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="list-stage-block">
+              <div class="list-stage-hdr">
+                <div class="list-pip" style="background:#FF3D6B; box-shadow:0 0 4px #FF3D6B;"></div>
+                <span class="list-stage-name" style="color:#FF3D6B;">Bunka</span>
+              </div>
+              <div class="list-acts">
+                <div class="list-act">
+                  <div class="list-act-avatar" style="background:#FF3D6B;">BK</div>
+                  <div class="list-act-info">
+                    <div class="list-act-name">Bunka Headliner</div>
+                    <div class="list-act-time">23:00 – 02:00</div>
+                  </div>
+                  <div class="list-bell set">
+                    <svg viewBox="0 0 24 24" fill="#2AFF00" stroke="#2AFF00" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  </div>
+                </div>
+                <div class="list-act">
+                  <div class="list-act-avatar" style="background:#FF3D6B;">DJ</div>
+                  <div class="list-act-info">
+                    <div class="list-act-name">Warm Up</div>
+                    <div class="list-act-time">21:00 – 23:00</div>
+                  </div>
+                  <div class="list-bell">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="list-stage-block">
+              <div class="list-stage-hdr">
+                <div class="list-pip" style="background:#FF7A00; box-shadow:0 0 4px #FF7A00;"></div>
+                <span class="list-stage-name" style="color:#FF7A00;">Groove2Funk</span>
+              </div>
+              <div class="list-acts">
+                <div class="list-act">
+                  <div class="list-act-avatar" style="background:#FF7A00;">G2</div>
+                  <div class="list-act-info">
+                    <div class="list-act-name">G2F Late Set</div>
+                    <div class="list-act-time">22:00 – 00:30</div>
+                  </div>
+                  <div class="list-bell">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  </div>
+                </div>
+                <div class="list-act">
+                  <div class="list-act-avatar" style="background:#FF7A00;">GF</div>
+                  <div class="list-act-info">
+                    <div class="list-act-name">Opening Funk</div>
+                    <div class="list-act-time">19:30 – 22:00</div>
+                  </div>
+                  <div class="list-bell">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SLIDE 3 — TIMETABLE BLOCK VIEW
+    ══════════════════════════════════════ -->
+    <div class="slide-wrap">
+      <span class="slide-label">Slide 3 of 5 — Timetable: Block View</span>
+      <div class="slide s3">
+        <div class="slide-num">01 — Timetable · Block View</div>
+        <div class="slide-headline small">SEE THE<br>FULL<br><span>PICTURE</span></div>
+        <div class="bview">
+          <!-- Day nav + view toggle -->
+          <div class="daynav-bar">
+            <div class="daynav-days">
+              <div class="daynav-btn">Fri</div>
+              <div class="daynav-btn active">Sat</div>
+              <div class="daynav-btn">Sun</div>
+            </div>
+            <div class="view-toggle-mock">
+              <div class="vbtn-mock">
+                <svg viewBox="0 0 18 18" fill="currentColor"><rect x="2" y="3" width="14" height="2.5" rx="1.25"/><rect x="2" y="7.75" width="14" height="2.5" rx="1.25"/><rect x="2" y="12.5" width="14" height="2.5" rx="1.25"/></svg>
+                list
+              </div>
+              <div class="vbtn-mock active">
+                <svg viewBox="0 0 18 18" fill="currentColor"><rect x="2" y="3" width="6" height="5" rx="1.25"/><rect x="10" y="3" width="6" height="5" rx="1.25"/><rect x="2" y="10" width="9" height="5" rx="1.25"/><rect x="13" y="10" width="3" height="5" rx="1.25"/></svg>
+                blocks
+              </div>
+            </div>
+          </div>
+          <!-- Time ruler: window 20:00–00:00 (4 hr ticks) -->
+          <div class="bruler">
+            <div class="bruler-tick">20:00</div>
+            <div class="bruler-tick">21:00</div>
+            <div class="bruler-tick">22:00</div>
+            <div class="bruler-tick">23:00</div>
+          </div>
+          <!-- Stage rows — real acts, Saturday, window 20:00–00:00 (240 min) -->
+          <div class="bstages">
+            <!-- Now line at 21:30 = 37.5% through window -->
+            <div class="bnow-line" style="left:37.5%">
+              <div class="bnow-label">21:30</div>
+            </div>
+
+            <!-- Outdoor Main Stage -->
+            <div class="bstage">
+              <div class="bstage-hdr" style="--sc:#2AFF00">
+                <div class="bstage-pip"></div>
+                <div class="bstage-name">Outdoor Main Stage</div>
+              </div>
+              <div class="btrack">
+                <!-- Local DJ's: 20:15–21:30 → 6.25%–37.5% -->
+                <div class="bblock" style="left:calc(6.25% + 2px);width:calc(31.25% - 4px);background:#2AFF00">
+                  <div class="bblock-inner">
+                    <span class="bblock-name">Local DJ's</span>
+                    <span class="bblock-time">20:15–21:30</span>
+                  </div>
+                </div>
+                <!-- Fish56Octagon: 21:30–23:30 → 37.5%–87.5% -->
+                <div class="bblock" style="left:calc(37.5% + 2px);width:calc(50% - 4px);background:#2AFF00">
+                  <div class="bblock-inner">
+                    <span class="bblock-name">Fish56Octagon</span>
+                    <span class="bblock-time">21:30–23:30</span>
+                  </div>
+                </div>
+                <!-- Travis Bradshaw: 23:30–00:30, clips at window end -->
+                <div class="bblock" style="left:calc(87.5% + 2px);width:calc(12.5% - 2px);background:#2AFF00">
+                  <div class="bblock-inner">
+                    <span class="bblock-name">Travis B.</span>
+                    <span class="bblock-time">23:30–</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bunka -->
+            <div class="bstage">
+              <div class="bstage-hdr" style="--sc:#FF3D6B">
+                <div class="bstage-pip"></div>
+                <div class="bstage-name">Bunka</div>
+              </div>
+              <div class="btrack">
+                <!-- Dan & Hendo: 20:00–21:30 → 0%–37.5% -->
+                <div class="bblock" style="left:calc(0% + 2px);width:calc(37.5% - 4px);background:#FF3D6B">
+                  <div class="bblock-inner">
+                    <span class="bblock-name">Dan &amp; Hendo</span>
+                    <span class="bblock-time">20:00–21:30</span>
+                  </div>
+                </div>
+                <!-- Gap 21:30–22:00 (12.5%) intentional -->
+                <!-- Bunka B2B2B: 22:00–23:45 → 50%–93.75% -->
+                <div class="bblock" style="left:calc(50% + 2px);width:calc(43.75% - 4px);background:#FF3D6B">
+                  <div class="bblock-inner">
+                    <span class="bblock-name">Bunka B2B2B</span>
+                    <span class="bblock-time">22:00–23:45</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Groove2Funk -->
+            <div class="bstage">
+              <div class="bstage-hdr" style="--sc:#FF7A00">
+                <div class="bstage-pip"></div>
+                <div class="bstage-name">Groove2Funk</div>
+              </div>
+              <div class="btrack">
+                <!-- G2F DJs: 20:30–23:45 → 12.5%–93.75% -->
+                <div class="bblock" style="left:calc(12.5% + 2px);width:calc(81.25% - 4px);background:#FF7A00">
+                  <div class="bblock-inner">
+                    <span class="bblock-name">G2F DJs</span>
+                    <span class="bblock-time">20:30–23:45</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Volume -->
+            <div class="bstage">
+              <div class="bstage-hdr" style="--sc:#20A5FF">
+                <div class="bstage-pip"></div>
+                <div class="bstage-name">Volume</div>
+              </div>
+              <div class="btrack">
+                <!-- Jacob Kneale: 20:15–21:30 → 6.25%–37.5% -->
+                <div class="bblock" style="left:calc(6.25% + 2px);width:calc(31.25% - 4px);background:#20A5FF">
+                  <div class="bblock-inner">
+                    <span class="bblock-name">Jacob Kneale</span>
+                    <span class="bblock-time">20:15–21:30</span>
+                  </div>
+                </div>
+                <!-- Fionn Mcard-Rooney: 21:30–22:45 → 37.5%–68.75% -->
+                <div class="bblock" style="left:calc(37.5% + 2px);width:calc(31.25% - 4px);background:#20A5FF">
+                  <div class="bblock-inner">
+                    <span class="bblock-name">Fionn M-R</span>
+                    <span class="bblock-time">21:30–22:45</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RoomTour -->
+            <div class="bstage">
+              <div class="bstage-hdr" style="--sc:#FF4488">
+                <div class="bstage-pip"></div>
+                <div class="bstage-name">RoomTour</div>
+              </div>
+              <div class="btrack">
+                <!-- Petz: 20:00–22:00 → 0%–50% -->
+                <div class="bblock" style="left:calc(0% + 2px);width:calc(50% - 4px);background:#FF4488">
+                  <div class="bblock-inner">
+                    <span class="bblock-name">Petz</span>
+                    <span class="bblock-time">20:00–22:00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SLIDE 4 — MAP
+    ══════════════════════════════════════ -->
+    <div class="slide-wrap">
+      <span class="slide-label">Slide 4 of 5 — Site Map</span>
+      <div class="slide s5">
+        <div class="slide-num">03 — Site Map</div>
+        <div class="slide-headline large">FIND<br>YOUR<br><span>WAY</span></div>
+        <div class="map-mock">
+          <div class="map-mock-bg"></div>
+
+          <!-- Sidebar key — open, matching real site -->
+          <div class="map-sidebar-mock">
+
+            <div class="msb-section">
+              <div class="msb-heading">Amenities</div>
+              <div class="msb-list">
+                <div class="msb-amenity">
+                  <span class="msb-icon"><svg viewBox="0 0 24 24"><path d="M4 6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2H4V6zm0 4h12l1 8H3l1-8zm3 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-6 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg></span>
+                  <span class="msb-label">Showers</span>
+                </div>
+                <div class="msb-amenity">
+                  <span class="msb-icon"><svg viewBox="0 0 24 24"><path d="M10 3H5a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h5v-2H6V5h4V3zm10.707 8.293-3-3-1.414 1.414L17.586 11H11v2h6.586l-1.293 1.293 1.414 1.414 3-3a1 1 0 0 0 0-1.414z"/></svg></span>
+                  <span class="msb-label">Exit / Entrance</span>
+                </div>
+                <div class="msb-amenity">
+                  <span class="msb-icon"><svg viewBox="0 0 24 24"><path d="M12 4a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-1 6h2a3 3 0 0 1 3 3v5h-2v-4h-1v7H9v-7H8v4H6v-5a3 3 0 0 1 3-3z"/></svg></span>
+                  <span class="msb-label">Toilets</span>
+                </div>
+                <div class="msb-amenity">
+                  <span class="msb-icon"><svg viewBox="0 0 24 24"><path d="M18 3v7c0 1.1-.9 2-2 2h-1v9h-2V12h-1a2 2 0 0 1-2-2V3h2v6h1V3h2v6h1V3h2zM7 3C5.3 3 4 4.9 4 7v5h2v9h2V12h2V7c0-2.1-1.3-4-3-4z"/></svg></span>
+                  <span class="msb-label">Food &amp; Drink</span>
+                </div>
+                <div class="msb-amenity">
+                  <span class="msb-icon"><svg viewBox="0 0 24 24"><path d="M19 9h-4V5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v4H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-4h4a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1z"/></svg></span>
+                  <span class="msb-label">Medic</span>
+                </div>
+                <div class="msb-amenity">
+                  <span class="msb-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></span>
+                  <span class="msb-label">Tickets &amp; Info</span>
+                </div>
+                <div class="msb-amenity">
+                  <span class="msb-icon"><svg viewBox="0 0 24 24"><path d="M6 2h10l1 4H5L6 2zM4 8h14l-1 13H5L4 8zm11 2h-2v8h2V10zm-4 0H9v8h2V10zm-4 0H5v8h2V10zM17 8h2a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2V8z"/></svg></span>
+                  <span class="msb-label">Alcohol &amp; Beverages</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="msb-section">
+              <div class="msb-heading">Stages</div>
+              <div class="msb-list">
+                <div class="msb-stage">
+                  <span class="msb-pip" style="background:#6EF9F5; box-shadow:0 0 4px #6EF9F5;"></span>
+                  <span class="msb-label">The Bar</span>
+                </div>
+                <div class="msb-stage">
+                  <span class="msb-pip" style="background:#2AFF00; box-shadow:0 0 4px #2AFF00;"></span>
+                  <span class="msb-label">Outside Stage</span>
+                </div>
+                <div class="msb-stage">
+                  <span class="msb-pip" style="background:#FF3D6B; box-shadow:0 0 4px #FF3D6B;"></span>
+                  <span class="msb-label">Bunka</span>
+                </div>
+                <div class="msb-stage">
+                  <span class="msb-pip" style="background:#FF7A00; box-shadow:0 0 4px #FF7A00;"></span>
+                  <span class="msb-label">Groove 2 Funk</span>
+                </div>
+                <div class="msb-stage">
+                  <span class="msb-pip" style="background:#FFD100; box-shadow:0 0 4px #FFD100;"></span>
+                  <span class="msb-label">Hot Wax</span>
+                </div>
+                <div class="msb-stage">
+                  <span class="msb-pip" style="background:#FF4488; box-shadow:0 0 4px #FF4488;"></span>
+                  <span class="msb-label">RoomTour</span>
+                </div>
+                <div class="msb-stage">
+                  <span class="msb-pip" style="background:#AA55FF; box-shadow:0 0 4px #AA55FF;"></span>
+                  <span class="msb-label">ReVival</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="msb-section">
+              <div class="msb-heading">Guides</div>
+              <div class="msb-list">
+                <div class="msb-guide">
+                  <span class="msb-dash" style="color:#FFD100;"></span>
+                  <span class="msb-label">Music Area</span>
+                </div>
+                <div class="msb-guide">
+                  <span class="msb-dash" style="color:#20A5FF;"></span>
+                  <span class="msb-label">Car Parking &amp; Drop Offs</span>
+                </div>
+                <div class="msb-guide">
+                  <span class="msb-dash" style="color:#FF7A00;"></span>
+                  <span class="msb-label">Campervans</span>
+                </div>
+                <div class="msb-guide">
+                  <span class="msb-dash" style="color:#FF3D3D;"></span>
+                  <span class="msb-label">Emergency Vehicles</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="map-zoom-chips">
+            <div class="map-zoom-chip">+</div>
+            <div class="map-zoom-chip">−</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SLIDE 5 — CTA
+    ══════════════════════════════════════ -->
+    <div class="slide-wrap">
+      <span class="slide-label">Slide 5 of 5 — Call to Action</span>
+      <div class="slide s6">
+        <div class="s6-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#2AFF00" stroke-width="1.5">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+            <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="s6-label">Access the app</div>
+        <div class="s6-headline">OPEN IT<br>ON YOUR<br><span>PHONE</span></div>
+        <div class="s6-url"><span>thefullmoonfestival.co.uk</span>/app</div>
+        <div class="s6-note">No download needed.<br>Works on any phone, any browser.<br>Completely free.</div>
+        <span class="s6-festival">The FullMoon Festival App · 2026 · Isle of Man</span>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

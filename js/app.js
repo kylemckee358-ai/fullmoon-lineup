@@ -207,7 +207,7 @@ function renderLineupView(day) {
               <div class="act-name">${escHtml(act.name)}</div>
               <div class="act-time">${act.start} – ${act.end}</div>
             </div>
-            <span class="act-type">${escHtml(act.type)}</span>
+
             <button class="bell-btn ${bellSet}"
               onclick="handleBell(this)"
               data-name="${escHtml(act.name)}"

@@ -2,21 +2,224 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Map — Full Moon Festival 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
-    html, body { height: 100%; }
-
-    #map {
+    /* ── Map area sits below the sticky nav, fills the rest of the viewport ── */
+    #map-area {
       height: calc(100vh - var(--site-nav-h));
-      width: 100%;
+      position: relative;
+      overflow: hidden;
     }
 
+    /* ── Pannable canvas fills the area ── */
+    #map-viewport {
+      position: absolute;
+      inset: 0;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+      background: #324c32;
+    }
+    #map-viewport.dragging { cursor: grabbing; }
+
+    #map-inner {
+      display: inline-block;
+      transform-origin: 0 0;
+    }
+    #map-inner img {
+      display: block;
+      width: 4000px;
+      height: 4000px;
+    }
+
+    /* ── Sidebar — absolute inside #map-area ── */
+    #map-sidebar {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 180px;
+      max-height: calc(100% - 20px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: rgba(10,10,10,0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(42,255,0,0.18);
+      border-radius: 8px;
+      z-index: 50;
+      padding: 10px 0 8px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(42,255,0,0.2) transparent;
+      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), opacity 0.28s;
+    }
+    #map-sidebar.hidden {
+      transform: translateX(calc(-100% - 20px));
+      opacity: 0;
+      pointer-events: none;
+    }
+    #map-sidebar::-webkit-scrollbar { width: 4px; }
+    #map-sidebar::-webkit-scrollbar-track { background: transparent; }
+    #map-sidebar::-webkit-scrollbar-thumb { background: rgba(42,255,0,0.2); border-radius: 2px; }
+
+    .sidebar-section {
+      padding: 0 10px 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 2px;
+    }
+    .sidebar-section:last-child { border-bottom: none; padding-bottom: 2px; }
+
+    .sidebar-heading {
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #2AFF00;
+      margin-bottom: 7px;
+      padding-top: 2px;
+    }
+
+    .sidebar-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .amenity-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .amenity-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .amenity-icon svg {
+      width: 11px;
+      height: 11px;
+      fill: rgba(255,255,255,0.75);
+    }
+    .amenity-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.2;
+    }
+
+    .stage-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .stage-pip {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 0 5px currentColor;
+    }
+    .stage-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+    }
+
+    .guide-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .guide-dash {
+      width: 22px;
+      height: 3px;
+      flex-shrink: 0;
+      border-radius: 2px;
+      background-image: repeating-linear-gradient(
+        to right,
+        currentColor 0,
+        currentColor 5px,
+        transparent 5px,
+        transparent 8px
+      );
+    }
+    .guide-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.2;
+    }
+
+    /* ── Show-sidebar button ── */
+    #sidebar-toggle {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      height: 28px;
+      padding: 0 10px;
+      background: rgba(10,10,10,0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(42,255,0,0.18);
+      border-radius: 6px;
+      color: #2AFF00;
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      z-index: 51;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    #sidebar-toggle:hover { background: rgba(42,255,0,0.12); }
+
+    /* ── Zoom controls ── */
+    #zoom-controls {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 10;
+    }
+    #zoom-controls button {
+      width: 40px;
+      height: 40px;
+      background: rgba(10,10,10,0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 20px;
+      line-height: 1;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #zoom-controls button:hover { background: rgba(42,255,0,0.15); border-color: #2aff00; }
   </style>
 </head>
 <body>
@@ -34,38 +237,299 @@
     <a class="site-nav__link active" href="map.html">Map</a>
   </nav>
 
-  <div id="map"></div>
+  <div id="map-area">
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Sidebar key — starts closed -->
+    <aside id="map-sidebar" class="hidden">
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading">Amenities</h3>
+        <ul class="sidebar-list">
+
+          <li class="amenity-item">
+            <span class="amenity-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2H4V6zm0 4h12l1 8H3l1-8zm3 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-6 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+              </svg>
+            </span>
+            <span class="amenity-label">Showers</span>
+          </li>
+
+          <li class="amenity-item">
+            <span class="amenity-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 3H5a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h5v-2H6V5h4V3zm10.707 8.293-3-3-1.414 1.414L17.586 11H11v2h6.586l-1.293 1.293 1.414 1.414 3-3a1 1 0 0 0 0-1.414z"/>
+              </svg>
+            </span>
+            <span class="amenity-label">Exit / Entrance</span>
+          </li>
+
+          <li class="amenity-item">
+            <span class="amenity-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-1 6h2a3 3 0 0 1 3 3v5h-2v-4h-1v7H9v-7H8v4H6v-5a3 3 0 0 1 3-3z"/>
+              </svg>
+            </span>
+            <span class="amenity-label">Toilets</span>
+          </li>
+
+          <li class="amenity-item">
+            <span class="amenity-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 3v7c0 1.1-.9 2-2 2h-1v9h-2V12h-1a2 2 0 0 1-2-2V3h2v6h1V3h2v6h1V3h2zM7 3C5.3 3 4 4.9 4 7v5h2v9h2V12h2V7c0-2.1-1.3-4-3-4z"/>
+              </svg>
+            </span>
+            <span class="amenity-label">Food &amp; Drink</span>
+          </li>
+
+          <li class="amenity-item">
+            <span class="amenity-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 9h-4V5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v4H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4v4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-4h4a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1z"/>
+              </svg>
+            </span>
+            <span class="amenity-label">Medic</span>
+          </li>
+
+          <li class="amenity-item">
+            <span class="amenity-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+              </svg>
+            </span>
+            <span class="amenity-label">Tickets &amp; Info</span>
+          </li>
+
+          <li class="amenity-item">
+            <span class="amenity-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 2h10l1 4H5L6 2zM4 8h14l-1 13H5L4 8zm11 2h-2v8h2V10zm-4 0H9v8h2V10zm-4 0H5v8h2V10zM17 8h2a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2V8z"/>
+              </svg>
+            </span>
+            <span class="amenity-label">Alcohol &amp; Beverages</span>
+          </li>
+
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading">Stages</h3>
+        <ul class="sidebar-list">
+          <li class="stage-item">
+            <span class="stage-pip" style="background:#6EF9F5; color:#6EF9F5;"></span>
+            <span class="stage-label">The Bar</span>
+          </li>
+          <li class="stage-item">
+            <span class="stage-pip" style="background:#2AFF00; color:#2AFF00;"></span>
+            <span class="stage-label">Outside Stage</span>
+          </li>
+          <li class="stage-item">
+            <span class="stage-pip" style="background:#FF3D6B; color:#FF3D6B;"></span>
+            <span class="stage-label">Bunka</span>
+          </li>
+          <li class="stage-item">
+            <span class="stage-pip" style="background:#FF7A00; color:#FF7A00;"></span>
+            <span class="stage-label">Groove 2 Funk</span>
+          </li>
+          <li class="stage-item">
+            <span class="stage-pip" style="background:#FFD100; color:#FFD100;"></span>
+            <span class="stage-label">Hot Wax</span>
+          </li>
+          <li class="stage-item">
+            <span class="stage-pip" style="background:#FF4488; color:#FF4488;"></span>
+            <span class="stage-label">Roomtour</span>
+          </li>
+          <li class="stage-item">
+            <span class="stage-pip" style="background:#AA55FF; color:#AA55FF;"></span>
+            <span class="stage-label">Revival</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading">Guides</h3>
+        <ul class="sidebar-list">
+          <li class="guide-item">
+            <span class="guide-dash" style="color:#FFD100;"></span>
+            <span class="guide-label">Music Area</span>
+          </li>
+          <li class="guide-item">
+            <span class="guide-dash" style="color:#20A5FF;"></span>
+            <span class="guide-label">Car Parking &amp; Drop Offs</span>
+          </li>
+          <li class="guide-item">
+            <span class="guide-dash" style="color:#FF7A00;"></span>
+            <span class="guide-label">Campervans</span>
+          </li>
+          <li class="guide-item">
+            <span class="guide-dash" style="color:#FF3D3D;"></span>
+            <span class="guide-label">Emergency Vehicles</span>
+          </li>
+        </ul>
+      </div>
+
+    </aside>
+
+    <!-- Show key button -->
+    <button id="sidebar-toggle" aria-label="Show map key">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C17 11.31 14.84 14.12 11.86 15.27L11 22H9L8 18H6L5 22H3L4 15.27C1.16 14.12-1 11.31-1 8a9 9 0 1 1 18 0zm-9 7.93V18h2v-2.07A7 7 0 0 0 8 15.93zM8 4a5 5 0 1 0 0 10A5 5 0 0 0 8 4z"/></svg>
+      Key
+    </button>
+
+    <!-- Map canvas -->
+    <div id="map-viewport">
+      <div id="map-inner">
+        <img src="Assets/NEW MAP.svg?v=2" alt="Full Moon Festival site map" draggable="false">
+      </div>
+    </div>
+
+    <!-- Zoom controls -->
+    <div id="zoom-controls">
+      <button id="zoom-in" aria-label="Zoom in">+</button>
+      <button id="zoom-out" aria-label="Zoom out">−</button>
+      <button id="zoom-reset" aria-label="Reset zoom" style="font-size:13px;">⌖</button>
+    </div>
+
+  </div><!-- /#map-area -->
+
   <script>
-    const LAT = 54.13855273175324;
-    const LNG = -4.542921268817676;
+    // Block browser-level pinch zoom so it can't fight with our map zoom
+    document.addEventListener('gesturestart',  e => e.preventDefault(), { passive: false });
+    document.addEventListener('gesturechange', e => e.preventDefault(), { passive: false });
+    document.addEventListener('gestureend',    e => e.preventDefault(), { passive: false });
+    document.addEventListener('touchmove', e => {
+      if (e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
 
-    const map = L.map('map').setView([LAT, LNG], 15);
+    // ── Sidebar close/open ──
+    const sidebar   = document.getElementById('map-sidebar');
+    const toggleBtn = document.getElementById('sidebar-toggle');
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" style="color:#2AFF00">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" style="color:#2AFF00">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 19
-    }).addTo(map);
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.setAttribute('aria-label', 'Hide map key');
+    closeBtn.style.cssText = `
+      position: absolute; top: 10px; right: 10px;
+      background: none; border: none; color: rgba(255,255,255,0.35);
+      font-size: 13px; cursor: pointer; padding: 2px 4px; line-height: 1;
+    `;
+    closeBtn.onmouseenter = () => closeBtn.style.color = '#fff';
+    closeBtn.onmouseleave = () => closeBtn.style.color = 'rgba(255,255,255,0.35)';
+    closeBtn.onclick = () => {
+      sidebar.classList.add('hidden');
+      toggleBtn.style.display = 'flex';
+    };
+    sidebar.insertBefore(closeBtn, sidebar.firstChild);
 
-    // 650m × 650m bounds centred on LAT/LNG, shifted 50m north
-    // ~0.002920° lat per 325m, ~0.004975° lng per 325m at this latitude
-    const svgBounds = [
-      [LAT - 0.002920 + 0.000449 - 0.000180, LNG - 0.004975 - 0.000765],
-      [LAT + 0.002920 + 0.000449 - 0.000180, LNG + 0.004975 - 0.000765]
-    ];
-    const RotatedOverlay = L.ImageOverlay.extend({
-      _reset: function () {
-        L.ImageOverlay.prototype._reset.call(this);
-        const el = this._image;
-        const rot = this.options.rotation || 0;
-        el.style.transformOrigin = 'center';
-        el.style.transform += ' rotate(' + rot + 'deg)';
-      }
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.remove('hidden');
+      toggleBtn.style.display = 'none';
     });
 
-    new RotatedOverlay('Assets/MAP.svg', svgBounds, { opacity: 1, rotation: 0 }).addTo(map);
+    // Sidebar starts hidden — toggle button starts visible
+    toggleBtn.style.display = 'flex';
+
+    // ── Map pan & zoom ──
+    const viewport = document.getElementById('map-viewport');
+    const inner    = document.getElementById('map-inner');
+
+    let scale = 1, minScale = 0.01, maxScale = 8;
+    let tx = 0, ty = 0;
+    let imgW = 4000, imgH = 4000;
+    let dragging = false, startX, startY, startTx, startTy;
+
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+    function applyTransform() {
+      inner.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+    }
+
+    function zoomAt(cx, cy, factor) {
+      const newScale = clamp(scale * factor, minScale, maxScale);
+      const ratio = newScale / scale;
+      tx = cx - ratio * (cx - tx);
+      ty = cy - ratio * (cy - ty);
+      scale = newScale;
+      applyTransform();
+    }
+
+    function fitToViewport() {
+      const vw = viewport.clientWidth;
+      const vh = viewport.clientHeight;
+      const img = inner.querySelector('img');
+      imgW = img.naturalWidth  || img.clientWidth  || 4000;
+      imgH = img.naturalHeight || img.clientHeight || 4000;
+      scale = Math.max(vw / imgW, vh / imgH);
+      minScale = scale;
+      tx = (vw - imgW * scale) / 2;
+      ty = (vh - imgH * scale) / 2;
+      if (vw < 768) ty -= 120;
+      applyTransform();
+    }
+
+    inner.querySelector('img').addEventListener('load', fitToViewport);
+    if (inner.querySelector('img').complete) fitToViewport();
+
+    viewport.addEventListener('wheel', e => {
+      e.preventDefault();
+      const rect = viewport.getBoundingClientRect();
+      zoomAt(e.clientX - rect.left, e.clientY - rect.top, e.deltaY < 0 ? 1.15 : 1 / 1.15);
+    }, { passive: false });
+
+    viewport.addEventListener('mousedown', e => {
+      dragging = true;
+      startX = e.clientX; startY = e.clientY;
+      startTx = tx; startTy = ty;
+      viewport.classList.add('dragging');
+    });
+    window.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      tx = startTx + e.clientX - startX;
+      ty = startTy + e.clientY - startY;
+      applyTransform();
+    });
+    window.addEventListener('mouseup', () => {
+      dragging = false;
+      viewport.classList.remove('dragging');
+    });
+
+    function snapTouches(touches) {
+      return Array.from(touches).map(t => ({ clientX: t.clientX, clientY: t.clientY }));
+    }
+
+    let lastTouches = null;
+    viewport.addEventListener('touchstart', e => {
+      lastTouches = snapTouches(e.touches);
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', e => {
+      lastTouches = snapTouches(e.touches);
+    }, { passive: true });
+    viewport.addEventListener('touchmove', e => {
+      e.preventDefault();
+      const t = snapTouches(e.touches);
+      if (t.length === 1 && lastTouches.length === 1) {
+        tx += t[0].clientX - lastTouches[0].clientX;
+        ty += t[0].clientY - lastTouches[0].clientY;
+        applyTransform();
+      } else if (t.length === 2 && lastTouches.length === 2) {
+        const rect = viewport.getBoundingClientRect();
+        const prevDist = Math.hypot(lastTouches[0].clientX - lastTouches[1].clientX, lastTouches[0].clientY - lastTouches[1].clientY);
+        const newDist  = Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+        const cx = ((t[0].clientX + t[1].clientX) / 2) - rect.left;
+        const cy = ((t[0].clientY + t[1].clientY) / 2) - rect.top;
+        zoomAt(cx, cy, newDist / prevDist);
+      }
+      lastTouches = t;
+    }, { passive: false });
+
+    document.getElementById('zoom-in').addEventListener('click', () => {
+      zoomAt(viewport.clientWidth / 2, viewport.clientHeight / 2, 1.3);
+    });
+    document.getElementById('zoom-out').addEventListener('click', () => {
+      zoomAt(viewport.clientWidth / 2, viewport.clientHeight / 2, 1 / 1.3);
+    });
+    document.getElementById('zoom-reset').addEventListener('click', fitToViewport);
   </script>
 
 </body>
