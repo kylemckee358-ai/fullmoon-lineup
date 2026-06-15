@@ -174,6 +174,22 @@ const LINEUP_DATA = {
       "type": "DJ"
     },
     {
+      "name": "T4",
+      "stage": "Groove2Funk",
+      "day": "Friday",
+      "start": "19:30",
+      "end": "20:30",
+      "type": "DJ"
+    },
+    {
+      "name": "Skeptiq",
+      "stage": "Groove2Funk",
+      "day": "Friday",
+      "start": "20:30",
+      "end": "21:30",
+      "type": "DJ"
+    },
+    {
       "name": "Barry Fearon",
       "stage": "Groove2Funk",
       "day": "Friday",
