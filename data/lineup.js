@@ -62,34 +62,34 @@ const LINEUP_DATA = {
       "type": "Band"
     },
     {
-      "name": "TBA",
+      "name": "Under The Bed",
       "stage": "The Pub",
       "day": "Friday",
       "start": "15:15",
-      "end": "15:45",
+      "end": "16:30",
       "type": "Band"
     },
     {
       "name": "The Dub Lhunes - The Dubbons",
       "stage": "The Pub",
       "day": "Friday",
-      "start": "16:15",
-      "end": "17:45",
+      "start": "17:00",
+      "end": "18:15",
       "type": "Band"
     },
     {
       "name": "CUNF",
       "stage": "The Pub",
       "day": "Friday",
-      "start": "18:15",
-      "end": "19:45",
+      "start": "18:45",
+      "end": "20:00",
       "type": "Band"
     },
     {
       "name": "Clash Vooar",
       "stage": "The Pub",
       "day": "Friday",
-      "start": "20:15",
+      "start": "20:30",
       "end": "21:45",
       "type": "Band"
     },
