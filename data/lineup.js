@@ -782,6 +782,38 @@ const LINEUP_DATA = {
       "type": "DJ"
     },
     {
+      "name": "Ecstatic Dance With Rosemary",
+      "stage": "Wellness Village",
+      "day": "Saturday",
+      "start": "10:00",
+      "end": "10:55",
+      "type": "DJ"
+    },
+    {
+      "name": "Slow Flow Yoga With Leanne",
+      "stage": "Wellness Village",
+      "day": "Saturday",
+      "start": "11:00",
+      "end": "11:30",
+      "type": "DJ"
+    },
+    {
+      "name": "Live Guided Meditation",
+      "stage": "Wellness Village",
+      "day": "Saturday",
+      "start": "11:30",
+      "end": "12:00",
+      "type": "DJ"
+    },
+    {
+      "name": "Open Chill Zone",
+      "stage": "Wellness Village",
+      "day": "Saturday",
+      "start": "12:00",
+      "end": "14:00",
+      "type": "DJ"
+    },
+    {
       "name": "Alice Dudley",
       "stage": "The Pub",
       "day": "Sunday",
